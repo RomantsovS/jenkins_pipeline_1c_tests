@@ -6,11 +6,13 @@ pipeline {
     
     stages {
         stage('Connection test') {
-            steps { script {
-
-                print  "I am alive!"
-
-            }}
+            steps { 
+                timestamps {
+                    script {
+                        print  "I am alive!"
+                    }
+                }
+            }
         }
     }
 }
