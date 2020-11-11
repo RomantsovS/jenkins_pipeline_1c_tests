@@ -53,7 +53,7 @@ pipeline {
     post {
         always {
             script {
-                commonMethods.emailJobStatus ("BUILD FAILED")
+                commonMethods.emailJobStatus ("BUILD STATUS")
             }
         }
     }
