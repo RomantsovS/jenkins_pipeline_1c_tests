@@ -290,18 +290,5 @@ def max(ArrayList numbers) {
 
 }
 
-// Блокирует поток выполнения кода на переданное число секунд. Работает только под Windows
-//
-// Параметры:
-//  sec - секунд, на которое нужно заблокировать поток.
-//
-def pauseThread(sec) {
-    if (isUnix()) {
-        raiseError("not implemented")
-    } else {
-        cmd("ping 127.0.0.1 -n ${sec} -w 1000 >NUL")
-    }
-}
-
 // Return this module as Groovy object 
 return this
