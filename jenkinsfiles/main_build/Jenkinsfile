@@ -2,17 +2,29 @@ pipeline {
 
     agent {label "dev1c" }
 
-    options { timestamps() }
+    options { 
+        timestamps()
+        timeout(time: 1, unit: 'HOURS')
+    }
     
     stages {
         stage('Connection test') {
-            steps { 
-                //timestamps {
+            steps {
                     script {
                         print  "I am alive!"
+
+                        commonMethods = load "./lib/CommonMethods.groovy
+
+                        try { timeout(time: 1, unit: 'MINUTES') {
+                            // Выполнение длительной операции
+                            commonMethods.pauseThread(61);
+                        }}
+                        catch(FlowInterruptedException excp) { // Возник таймаут или операция была прервана вручную
+                            if (commonMethods.isTimeoutException(excp))
+                                commonMethods.throwTimeoutException("${STAGE_NAME}")
+                        }
                     }
                 }
-            //}
         }
     }
 }
