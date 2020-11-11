@@ -3,6 +3,7 @@ pipeline {
     agent {label "dev1c" }
 
     options { 
+        buildDiscarder(logRotator(numToKeepStr: '7'))
         timestamps()
         timeout(time: 1, unit: 'HOURS')
     }
