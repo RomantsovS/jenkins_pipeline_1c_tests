@@ -2,7 +2,7 @@ pipeline {
 
     agent {label "dev1c" }
 
-    options { timestamps() }
+    //options { timestamps() }
     
     stages {
         stage('Connection test') {
