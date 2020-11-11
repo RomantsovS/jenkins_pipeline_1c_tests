@@ -49,4 +49,12 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            script {
+                commonMethods.emailJobStatus ("BUILD FAILED")
+            }
+        }
+    }
 }
