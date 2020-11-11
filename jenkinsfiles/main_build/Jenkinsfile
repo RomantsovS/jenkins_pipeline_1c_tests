@@ -13,7 +13,7 @@ pipeline {
                     script {
                         print  "I am alive!"
 
-                        commonMethods = load "./lib/CommonMethods.groovy
+                        commonMethods = load "./lib/CommonMethods.groovy"
 
                         try { timeout(time: 1, unit: 'MINUTES') {
                             // Выполнение длительной операции
