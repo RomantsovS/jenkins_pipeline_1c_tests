@@ -22,7 +22,7 @@ pipeline {
                     catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 15, unit: 'SECONDS') { 
                             echo "Started stage A"
-                            sleep(time: 5, unit: "SECONDS")
+                            sleep(time: 15, unit: "SECONDS")
                         }
                         } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
                             echo "catched FlowInterruptedException"
