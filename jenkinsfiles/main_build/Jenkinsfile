@@ -1,0 +1,16 @@
+pipeline {
+
+    agent {label "dev1c" }
+
+    options { timestamps() }
+    
+    stages {
+        stage('Connection test') {
+            steps { script {
+
+                print  "I am alive!"
+
+            }}
+        }
+    }
+}
