@@ -25,8 +25,10 @@ pipeline {
                             sleep(time: 5, unit: "SECONDS")
                         }
                         } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
-                            if (commonMethods.isTimeoutException(excp))
+                            if (commonMethods.isTimeoutException(excp)) {
+                                echo "isTimeoutException = true"
                                 commonMethods.throwTimeoutException("${STAGE_NAME}")
+                            }
                         } catch (Throwable e) {
                             caughtException = e
                         }
