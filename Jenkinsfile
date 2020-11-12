@@ -33,7 +33,7 @@ pipeline {
 
             steps {
                 script {                    
-                    //Exception caughtException = null
+                    Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
@@ -48,13 +48,14 @@ pipeline {
                             }
                         }
                         catch (Throwable excp) {
+                            echo "catched Throwable"
                             caughtException = excp
                         }
                     //}
 
-                    //if (caughtException) {
-                    //    error caughtException.message
-                    //}
+                    if (caughtException) {
+                        error caughtException.message
+                    }
                 }
             }
         }
