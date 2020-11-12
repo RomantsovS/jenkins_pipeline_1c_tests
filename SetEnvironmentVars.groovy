@@ -13,7 +13,7 @@ if (isUnix()) {
     env.THICK_CLIENT_1C_FOR_STORAGE = env.THICK_CLIENT_1C
     // env.ONE_SCRIPT_PATH="/usr/bin/oscript"
 } else {
-    env.PLATFORM_1C_VERSION = "8.3.12"
+    env.PLATFORM_1C_VERSION = "8.3.12.1685"
 }
 
 env.SQL_SERVER = "DB01"
