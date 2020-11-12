@@ -5,7 +5,7 @@ def commonMethods
 
 def clusterIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterName1C) {
     
-    def command = "${env.INSTALLATION_DIR_1C}/rac  ${rasHostnameOrIP}:${rasPort} cluster list | grep -B1 '${clusterName1C}' | head -1 | tr -d ' ' | cut -d ':' -f 2"
+    def command = "${env.INSTALLATION_DIR_1C}rac  ${rasHostnameOrIP}:${rasPort} cluster list | grep -B1 '${clusterName1C}' | head -1 | tr -d ' ' | cut -d ':' -f 2"
     def clusterId = commonMethods.cmdReturnStdout(command)
     clusterId = clusterId.trim()
 
@@ -19,7 +19,7 @@ def clusterIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterName1C) {
 
 def databaseIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterId, databaseName1C) {
     
-    def command = "${env.INSTALLATION_DIR_1C}/rac ${rasHostnameOrIP}:${rasPort} infobase --cluster ${clusterId} summary list | grep -B1 '${databaseName1C}' | head -1 | tr -d ' ' | cut -d ':' -f 2"
+    def command = "${env.INSTALLATION_DIR_1C}rac ${rasHostnameOrIP}:${rasPort} infobase --cluster ${clusterId} summary list | grep -B1 '${databaseName1C}' | head -1 | tr -d ' ' | cut -d ':' -f 2"
     def databaseId = commonMethods.cmdReturnStdout(command)
     databaseId = databaseId.trim()
 
@@ -48,7 +48,7 @@ def dropDatabaseViaRAS(rasHostnameOrIP,
 
     if (databaseId != "") {
 
-        def command = "${env.INSTALLATION_DIR_1C}/rac ${rasHostnameOrIP}:${rasPort} infobase --cluster ${clusterId} drop --infobase=${databaseId}  --infobase-user=\"${databaseUser}\" --infobase-pwd=\"${databasePassword}\""
+        def command = "${env.INSTALLATION_DIR_1C}rac ${rasHostnameOrIP}:${rasPort} infobase --cluster ${clusterId} drop --infobase=${databaseId}  --infobase-user=\"${databaseUser}\" --infobase-pwd=\"${databasePassword}\""
         
         if (dropSQLDatabase) {
             command += " --drop-database"
@@ -76,7 +76,7 @@ def forbidScheduledJobsViaRas(rasHostnameOrIP, rasPort, clusterName, databaseNam
     def clusterId = clusterIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterName)
     def databaseId = databaseIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterId, databaseName)    
 
-    def command = "${env.INSTALLATION_DIR_1C}/rac ${rasHostnameOrIP}:${rasPort} infobase --cluster ${clusterId} update --infobase=${databaseId}  --infobase-user=\"${databaseUser}\" --infobase-pwd=\"${databasePassword}\" --scheduled-jobs-deny=on"
+    def command = "${env.INSTALLATION_DIR_1C}rac ${rasHostnameOrIP}:${rasPort} infobase --cluster ${clusterId} update --infobase=${databaseId}  --infobase-user=\"${databaseUser}\" --infobase-pwd=\"${databasePassword}\" --scheduled-jobs-deny=on"
     commonMethods.cmd(command)
 }
 
@@ -86,7 +86,7 @@ def permitScheduledJobsViaRas(rasHostnameOrIP, rasPort, clusterName, databaseNam
     def clusterId = clusterIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterName)
     def databaseId = databaseIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterId, databaseName)    
 
-    def command = "${env.INSTALLATION_DIR_1C}/rac ${rasHostnameOrIP}:${rasPort} infobase --cluster ${clusterId} update --infobase=${databaseId}  --infobase-user=\"${databaseUser}\" --infobase-pwd=\"${databasePassword}\" --scheduled-jobs-deny=off"
+    def command = "${env.INSTALLATION_DIR_1C}rac ${rasHostnameOrIP}:${rasPort} infobase --cluster ${clusterId} update --infobase=${databaseId}  --infobase-user=\"${databaseUser}\" --infobase-pwd=\"${databasePassword}\" --scheduled-jobs-deny=off"
     commonMethods.cmd(command)
 }
 
