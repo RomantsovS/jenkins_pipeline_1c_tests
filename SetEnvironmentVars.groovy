@@ -15,7 +15,7 @@ if (isUnix()) {
     // env.ONE_SCRIPT_PATH="/usr/bin/oscript"
 } else {
     env.PLATFORM_1C_VERSION = "8.3.12"
-    env.INSTALLATION_DIR_1C = "\\\\rusklimat.ru\\app\\1Cv8ADM"
+    env.INSTALLATION_DIR_1C = "\\\\rusklimat.ru\\app\\1Cv8ADM\\8.3.16.1063\\bin"
 }
 
 env.SERVER_SQL = "DB01"
