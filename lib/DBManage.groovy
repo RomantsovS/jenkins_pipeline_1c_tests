@@ -101,7 +101,7 @@ def deleteConnectionsViaRas(rasHostnameOrIP, rasPort, clusterName, databaseName,
     def databaseId = databaseIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterId, databaseName)    
 
     if (databaseId != "") {
-        def command = "${env.INSTALLATION_DIR_1C}/rac ${rasHostnameOrIP}:${rasPort} session --cluster ${clusterId} list --infobase=${databaseId}  | grep 'session ' | tr -d ' ' | cut -d ':' -f 2 | while read line ; do  ${env.INSTALLATION_DIR_1C}/rac session --cluster ${clusterId} terminate --session=\$line; done"
+        def command = "${env.INSTALLATION_DIR_1C}rac ${rasHostnameOrIP}:${rasPort} session --cluster ${clusterId} list --infobase=${databaseId}  | grep 'session ' | tr -d ' ' | cut -d ':' -f 2 | while read line ; do  ${env.INSTALLATION_DIR_1C}/rac session --cluster ${clusterId} terminate --session=\$line; done"
         commonMethods.cmd(command)
     }
 
