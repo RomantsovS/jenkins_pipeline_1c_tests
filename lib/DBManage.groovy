@@ -329,7 +329,7 @@ def restartApache() {
 }
 
 
-this.commonMethods = load "./CommonMethods.groovy"
+this.commonMethods = load "./lib/CommonMethods.groovy"
 
 // return this module as Groovy object
 return this
