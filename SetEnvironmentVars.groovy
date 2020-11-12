@@ -13,12 +13,12 @@ if (isUnix()) {
     env.THICK_CLIENT_1C_FOR_STORAGE = env.THICK_CLIENT_1C
     // env.ONE_SCRIPT_PATH="/usr/bin/oscript"
 } else {
-    env.PLATFORM_1C_VERSION = "8.3.12.1685"
+    env.PLATFORM_1C_VERSION = "8.3.12"
 }
 
-env.SQL_SERVER = "DB01"
+env.SERVER_SQL = "DB01"
 
-env.1C_SERVER = "cv8app12:1741"
+env.SERVER_1C = "cv8app12:1741"
 
 env.DB_NAME = "ERP_TEST_FOR_CI"
 
