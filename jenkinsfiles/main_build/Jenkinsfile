@@ -27,7 +27,7 @@ pipeline {
 
                     catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 15, unit: 'SECONDS') { 
-                            echo %jenkinsAgent%
+                            echo "%jenkinsAgent%"
                             echo "Started stage A"
                             sleep(time: 15, unit: "SECONDS")
                         }
