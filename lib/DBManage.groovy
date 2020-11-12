@@ -180,7 +180,7 @@ def createDB(platform, server1c, serversql, base, cfdt, isras) {
     def command = "oscript one_script_tools/dbcreator.os ${platformLine} -server1c ${server1c} -serversql ${serversql} -base ${base} ${cfdtpath}";
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
-    echo returnCode
+    echo "$returnCode"
     
     if (returnCode != 0) {
         commonMethods.echoAndError("Возникла ошибка при создании базы ${base} в кластере ${serversql}")
