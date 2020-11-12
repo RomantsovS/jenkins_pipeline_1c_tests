@@ -21,7 +21,19 @@ def assertWithEcho(booleanExpression, errorMessage, successMessage = "") {
 
 def echoAndError(message) {
     echo message
+    setBuildResultMessage(errorText)
     error message
+}
+
+// Создает и прикрепляет артефакт к сборке в виде текстового файла. Каждый вызов метода перезатирает артефакт.
+//
+// Параметры:
+//  text - текст для помещения в артефакт
+//
+def setBuildResultMessage(text){
+    def fileName = 'BuildResultMessage.txt'
+    writeFile(file: fileName, text: text, encoding: "UTF-8")
+    step([$class: 'ArtifactArchiver', artifacts: fileName, fingerprint: true])
 }
 
 def stdoutDependingOnOS() {
