@@ -1,7 +1,7 @@
 pipeline {
-    parameters {
-        //string(defaultValue: "${env.jenkinsAgent}", description: 'Нода дженкинса, на которой запускать пайплайн. По умолчанию master', name: 'jenkinsAgent')
-    }
+    //parameters {
+    //    string(defaultValue: "${env.jenkinsAgent}", description: 'Нода дженкинса, на которой запускать пайплайн. По умолчанию master', name: 'jenkinsAgent')
+    //}
 
     agent { label "dev1c" }
 
