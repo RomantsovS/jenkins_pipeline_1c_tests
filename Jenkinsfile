@@ -26,6 +26,41 @@ pipeline {
             }
         }
 
+        stage("Delete test DB") {
+            options {
+                timeout(time: 15, unit: "MINUTES")
+            }
+
+            steps {
+                script {                    
+                    Exception caughtException = null
+
+                    //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
+                        try { timeout(time: 5, unit: 'MINUTES') { 
+                            dbManage.dropSQLand1CDatabaseIfExists(env.SERVER_SQL, null, null, env.SERVER_1C, env.RAS_PORT,
+                            env.CLUSTER_NAME_1C, env.DB_NAME, env.DB_NAME, false, false)
+                        }}
+                        catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
+                            echo "catched FlowInterruptedException"
+
+                            if (commonMethods.isTimeoutException(excp)) {
+                                echo "isTimeoutException = true"
+                                commonMethods.throwTimeoutException("${STAGE_NAME}")
+                            }
+                        }
+                        catch (Throwable excp) {
+                            echo "catched Throwable"
+                            caughtException = excp
+                        }
+                    //}
+
+                    if (caughtException) {
+                        error caughtException.message
+                    }
+                }
+            }
+        }
+
         stage("Create test DB") {
             options {
                 timeout(time: 15, unit: "MINUTES")

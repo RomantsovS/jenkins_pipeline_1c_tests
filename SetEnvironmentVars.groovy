@@ -5,6 +5,7 @@ def getJenkinsMaster() {
     return env.BUILD_URL.split('/')[2].split(':')[0]
 }
 
+env.VERBOSE = "true"
 env.EMAIL_ADDRESS_FOR_NOTIFICATIONS = "romantsov_s@rusklimat.ru"
 
 if (isUnix()) {
@@ -14,11 +15,14 @@ if (isUnix()) {
     // env.ONE_SCRIPT_PATH="/usr/bin/oscript"
 } else {
     env.PLATFORM_1C_VERSION = "8.3.12"
+    env.INSTALLATION_DIR_1C = "\\rusklimat.ru\app\1Cv8ADM"
 }
 
 env.SERVER_SQL = "DB01"
 
 env.SERVER_1C = "cv8app12:1741"
+env.RAS_PORT = "1745"
+env.CLUSTER_NAME_1C = "ERP TEST ENV"
 
 env.DB_NAME = "ERP_TEST_FOR_CI"
 

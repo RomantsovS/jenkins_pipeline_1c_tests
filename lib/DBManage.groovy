@@ -114,15 +114,8 @@ def deleteConnectionsViaRas(rasHostnameOrIP, rasPort, clusterName, databaseName,
 }
 
 
-def dropSQLand1CDatabaseIfExists(serverSQL,
-                                 userSQL,
-                                 passwordSQL,
-                                 rasHostnameOrIP,
-                                 rasPort,
-                                 clusterName1C,
-                                 databaseNameSQL,
-                                 databaseName1C,
-                                 kill1CProcesses = true) {
+def dropSQLand1CDatabaseIfExists(serverSQL, userSQL, passwordSQL, rasHostnameOrIP, rasPort, clusterName1C, databaseNameSQL,
+                                databaseName1C, dropSql_DB, kill1CProcesses = false) {
     
     if (env.VERBOSE == "true") { 
         echo "Trying to drop database ${databaseNameSQL} on SQL server and ${databaseName1C} on 1C server"
@@ -130,25 +123,20 @@ def dropSQLand1CDatabaseIfExists(serverSQL,
 
     deleteConnectionsViaRas(rasHostnameOrIP, rasPort, clusterName1C, databaseName1C, kill1CProcesses)
 
-    def command = """export PGPASSWORD=${passwordSQL}
-    psql -h ${serverSQL} -U ${userSQL} -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${databaseNameSQL}'"
-    psql -h ${serverSQL} -U ${userSQL} -c "DROP DATABASE IF EXISTS ${databaseNameSQL}"
-    """    
-    commonMethods.cmd(command)
+    if(dropSql_DB) {
+        def command = """export PGPASSWORD=${passwordSQL}
+        psql -h ${serverSQL} -U ${userSQL} -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${databaseNameSQL}'"
+        psql -h ${serverSQL} -U ${userSQL} -c "DROP DATABASE IF EXISTS ${databaseNameSQL}"
+        """    
+        commonMethods.cmd(command)
+    }
 
     dropDatabaseViaRAS(rasHostnameOrIP, rasPort, clusterName1C, databaseName1C, false)
 
 }
 
 
-def createDatabase(serverSQL,
-                   userSQL,
-                   passwordSQL,
-                   rasHostnameOrIP,
-                   rasPort,
-                   clusterName1C,
-                   databaseNameSQL,
-                   databaseName1C) {
+def createDatabase(serverSQL, userSQL, passwordSQL, rasHostnameOrIP, rasPort, clusterName1C, databaseNameSQL, databaseName1C) {
 
     def clusterId = clusterIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterName1C)
     def command = "${env.INSTALLATION_DIR_1C}/rac ${rasHostnameOrIP}:${rasPort} infobase --cluster ${clusterId} create --create-database --name=${databaseName1C} --dbms=PostgreSQL --db-server=${serverSQL} --db-name=${databaseNameSQL} --locale=ru --db-user=${userSQL} --db-pwd=${passwordSQL} --license-distribution=allow"
@@ -180,13 +168,12 @@ def createDB(platform, server1c, serversql, base, cfdt, isras) {
     def command = "oscript one_script_tools/dbcreator.os ${platformLine} -server1c ${server1c} -serversql ${serversql} -base ${base} ${cfdtpath}";
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
-    echo "$returnCode"
+    echo "cmd status code $returnCode"
     
     if (returnCode != 0) {
-        commonMethods.echoAndError("Возникла ошибка при создании базы ${base} в кластере ${serversql}")
+        commonMethods.echoAndError("Error creating DB ${base} at ${serversql}")
     }
 }
-
 
 def createFileDatabase(pathTo1CThickClient, databaseDirectory, deleteIfExits) {
     
