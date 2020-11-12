@@ -21,7 +21,7 @@ def assertWithEcho(booleanExpression, errorMessage, successMessage = "") {
 
 def echoAndError(message) {
     echo message
-    setBuildResultMessage(errorText)
+    setBuildResultMessage(message)
     error message
 }
 
