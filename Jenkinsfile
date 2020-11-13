@@ -27,6 +27,8 @@ pipeline {
         }
 
         stage("Delete test DB") {
+            when { expression {params.delete_test_db} }
+
             options {
                 timeout(time: 15, unit: "MINUTES")
             }
@@ -62,6 +64,8 @@ pipeline {
         }
 
         stage("Create test DB") {
+            when { expression {params.create_test_db} }
+
             options {
                 timeout(time: 15, unit: "MINUTES")
             }
