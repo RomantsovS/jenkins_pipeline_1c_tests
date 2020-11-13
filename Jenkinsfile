@@ -72,8 +72,8 @@ pipeline {
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
-                            dbManage.createDB(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.SERVER_SQL, env.DB_NAME, env.CLUSTER_1C_PORT, env.RAC_PATH,
-                            , true, env.RAC_PATH, env.RAC_PORT, env.VERBOSE)
+                            dbManage.createDB(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.SERVER_SQL, env.DB_NAME,
+                            env.CLUSTER_1C_PORT, , true, env.RAC_PATH, env.RAC_PORT, env.VERBOSE)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             echo "catched FlowInterruptedException"
