@@ -24,7 +24,7 @@ pipeline {
                     load "./SetEnvironmentVars.groovy"   // Загружаем переменные окружения (настойки)
                     commonMethods = load "./lib/CommonMethods.groovy" // Загружаем общий модуль
                     dbManage = load "./lib/DBManage.groovy"
-                    dbManage = load "./lib/SqlUtils.groovy"
+                    sqlUtils = load "./lib/SqlUtils.groovy"
                 }
             }
         }
