@@ -36,6 +36,9 @@ pipeline {
 
             steps {
                 script {                    
+                    echo "Hello ${params.delete_test_db}"
+                    echo "Hello ${delete_test_db}"
+
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
