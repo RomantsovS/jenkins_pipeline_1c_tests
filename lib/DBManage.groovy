@@ -2,7 +2,6 @@ import org.jenkinsci.plugins.workflow.steps.FlowInterruptedException
 
 def commonMethods
 
-
 def clusterIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterName1C) {
     
     def command = "${env.INSTALLATION_DIR_1C}rac  ${rasHostnameOrIP}:${rasPort} cluster list | grep -B1 '${clusterName1C}' | head -1 | tr -d ' ' | cut -d ':' -f 2"
@@ -241,6 +240,10 @@ def dropDb(platform, server1c, cluster1c_name, serversql, base_name, rac_path, r
     }
 }
 
+def backupTask(serverSql, infobase, backupPath, sqlUser, sqlPwd) {
+    sqlUtils.checkDb(serverSql, infobase, sqlUser, sqlPwd)
+    //sqlUtils.backupDb(serverSql, infobase, backupPath, sqlUser, sqlPwd)
+}
 
 def createFileDatabase(pathTo1CThickClient, databaseDirectory, deleteIfExits) {
     

@@ -26,3 +26,4 @@ env.RAC_PORT = "1745"
 env.CLUSTER_NAME_1C = "\"ERP TEST ENV\""
 
 env.DB_NAME = "ERP_TEST_FOR_CI"
+env.DB_NAME_TEMPLATE = env.DB_NAME + "_Template"

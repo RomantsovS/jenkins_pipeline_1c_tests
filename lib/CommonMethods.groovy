@@ -303,5 +303,16 @@ def max(ArrayList numbers) {
 
 }
 
+// Возвращает Timestamp вида yyyyMMdddss
+//
+// Возвращаемое значение
+//  String - сгенерированный timestamp
+//
+def currentDateStamp() {
+    dateFormat = new SimpleDateFormat("yyyyMMdddss");
+    date = new Date();
+    return  dateFormat.format(date);
+}
+
 // Return this module as Groovy object 
 return this
