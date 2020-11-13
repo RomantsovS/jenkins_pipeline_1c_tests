@@ -208,7 +208,7 @@ def createDB(platform, server1c, serversql, base_name, cluster1c_port, cfdt, isr
 //  sqlPwd - пароль sql
 //  fulldrop - если true, то удаляется база из кластера 1С и sql сервера
 //
-def dropDb(platform, server1c, serversql, base_name, rac_path, rac_port, verbose, fulldrop = false) {
+def dropDb(platform, server1c, cluster1c_name, serversql, base_name, rac_path, rac_port, verbose, fulldrop = false) {
 
     platformLine = ""
     if (platform != null && !platform.isEmpty()) {
@@ -228,7 +228,7 @@ def dropDb(platform, server1c, serversql, base_name, rac_path, rac_port, verbose
         db_operation_line = "-db_operation drop";
     }
 
-    def command = "oscript one_script_tools/db_drop.os ${platformLine} -server1c ${server1c} -serversql ${serversql} -base_name ${base_name}"
+    def command = "oscript one_script_tools/db_drop.os ${platformLine} -server1c ${server1c} -cluster1c_name ${cluster1c_name} -serversql ${serversql} -base_name ${base_name}"
     command = command + " ${rac_path_line} ${rac_port_line} ${db_operation_line} ${verbose_line}";
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
