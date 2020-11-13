@@ -1,7 +1,8 @@
 pipeline {
-    //parameters {
-    //    string(defaultValue: "${env.jenkinsAgent}", description: 'Нода дженкинса, на которой запускать пайплайн. По умолчанию master', name: 'jenkinsAgent')
-    //}
+    parameters {
+        bolean(defaultValue: "${env.delete_test_db}", description: 'Условие удаления тестовой базы. По умолчанию Истина', name: 'delete_test_db')
+        bolean(defaultValue: "${env.create_test_db}", description: 'Условие создания тестовой базы. По умолчанию Истина', name: 'create_test_db')
+    }
 
     agent { label "dev1c" }
 
@@ -27,7 +28,7 @@ pipeline {
         }
 
         stage("Delete test DB") {
-            when { expression {params.delete_test_db} }
+            when { expression {delete_test_db} }
 
             options {
                 timeout(time: 15, unit: "MINUTES")
@@ -64,7 +65,7 @@ pipeline {
         }
 
         stage("Create test DB") {
-            when { expression {params.create_test_db} }
+            when { expression {create_test_db} }
 
             options {
                 timeout(time: 15, unit: "MINUTES")
