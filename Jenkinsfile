@@ -1,7 +1,7 @@
 pipeline {
     parameters {
-        choice(name: 'delete_test_db', choices: ['Yes', 'No'], description: 'Условие удаления тестовой базы. По умолчанию Истина', defaultValue: "${env.delete_test_db}")
-        choice(name: 'create_test_db', choices: ['Yes', 'No'], description: 'Условие создания тестовой базы. По умолчанию Истина', defaultValue: "${env.create_test_db}")
+        choice(name: 'delete_test_db', choices: ['Yes', 'No'], description: 'Условие удаления тестовой базы. По умолчанию Истина')
+        choice(name: 'create_test_db', choices: ['Yes', 'No'], description: 'Условие создания тестовой базы. По умолчанию Истина')
     }
 
     agent { label "dev1c" }
@@ -28,7 +28,7 @@ pipeline {
         }
 
         stage("Delete test DB") {
-            when { expression {delete_test_db == 'Yes'} }
+            when { expression {delete_test_db <> 'No'} }
 
             options {
                 timeout(time: 15, unit: "MINUTES")
@@ -65,7 +65,7 @@ pipeline {
         }
 
         stage("Create test DB") {
-            when { expression {create_test_db == 'Yes'} }
+            when { expression {create_test_db <> 'No'} }
 
             options {
                 timeout(time: 15, unit: "MINUTES")
