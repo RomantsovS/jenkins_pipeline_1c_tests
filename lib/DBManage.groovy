@@ -211,7 +211,7 @@ def createDB(platform, server1c, serversql, base_name, cluster1c_port, cfdt, isr
 def dropDb(platform, server1c, serversql, base_name, rac_path, rac_port, verbose, fulldrop = false) {
 
     platformLine = ""
-    if (platformLine != null && !platformLine.isEmpty()) {
+    if (platform != null && !platform.isEmpty()) {
         platformLine = "-platform ${platform}"
     }
 
