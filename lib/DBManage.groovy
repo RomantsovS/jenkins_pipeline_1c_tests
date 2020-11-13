@@ -164,6 +164,7 @@ def createDB(platform, server1c, serversql, base_name, cluster1c_port, cfdt, isr
     isras_line = ""
     rac_path_line = "";
     rac_port_line = "";
+    cluster1c_name_line = "";
     if (isras) {
         isras_line = "-isras true"
         rac_path_line = "-rac_path " + rac_path;
