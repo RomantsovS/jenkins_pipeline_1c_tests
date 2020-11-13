@@ -52,11 +52,11 @@ def backupDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
     }
 
     def command = "sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/copy_etalon/backup.sql\" -b -v"
-    command = command + " backupdb =${infobase} -v bakfile=\"${backupPath}\"")
+    command = command + " backupdb =${infobase} -v bakfile=\"${backupPath}\""
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
-    
+
     if (returnCode != 0) {
         commonMethods.echoAndError("Возникла ошибки при создании бекапа sql базы ${dbServer}\\${infobase}. Для подробностей смотрите логи")
     }
