@@ -1,6 +1,7 @@
 import org.jenkinsci.plugins.workflow.steps.FlowInterruptedException
 
 def commonMethods
+def sqlUtils
 
 def clusterIdentifierFromRAS(rasHostnameOrIP, rasPort, clusterName1C) {
     
