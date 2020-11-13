@@ -9,7 +9,6 @@ package io.libs;
 //  sqlPwd - Необязательный. пароль админа sql базы
 //
 def checkDb(dbServer, infobase, sqlUser, sqlPwd) {
-    utils = new Utils()
 
     sqlUserpath = "" 
     if (sqlUser != null && !sqlUser.isEmpty()) {
@@ -23,7 +22,12 @@ def checkDb(dbServer, infobase, sqlUser, sqlPwd) {
         sqlPwdPath = "-P ${sqlPwd}"
     }
 
-    returnCode = utils.cmd("sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/copy_etalon/error.sql\" -b -v restoreddb =${infobase}");
+    def command = "sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/copy_etalon/error.sql\" -b -v restoreddb =${infobase}";
+    
+    returnCode = commonMethods.cmdReturnStatusCode(command)
+    
+    echo "cmd status code $returnCode"
+    
     if (returnCode != 0) {
         commonMethods.echoAndError("Возникла ошибка при при проверке соединения к sql базе ${dbServer}\\${infobase}. Для подробностей смотрите логи")
     }
