@@ -155,7 +155,7 @@ def createDatabase(serverSQL, userSQL, passwordSQL, rasHostnameOrIP, rasPort, cl
 //  cfdt - файловый путь к dt или cf конфигурации для загрузки. Только для пакетного режима!
 //  isras - если true, то используется RAS для скрипта, в противном случае - пакетный режим
 //
-def createDB(platform, server1c, serversql, base_name, cluster1c_port, cfdt, isras, rac_path, rac_port, verbose) {
+def createDB(platform, server1c, serversql, base_name, cluster1c_port, cfdt, isras, rac_path, rac_port, cluster1c_name, verbose) {
     cfdtpath = ""
     if (cfdt != null && !cfdt.isEmpty()) {
         cfdtpath = "-cfdt ${cfdt}"
@@ -168,6 +168,7 @@ def createDB(platform, server1c, serversql, base_name, cluster1c_port, cfdt, isr
         isras_line = "-isras true"
         rac_path_line = "-rac_path " + rac_path;
         rac_port_line = "-rac_port " + rac_port;
+        cluster1c_name_line = "-cluster1c_name ${cluster1c_name}";
     }
 
     platformLine = ""
@@ -186,7 +187,7 @@ def createDB(platform, server1c, serversql, base_name, cluster1c_port, cfdt, isr
     }
 
     def command = "oscript one_script_tools/db_create.os ${platformLine} -server1c ${server1c} -serversql ${serversql} -base_name ${base_name}";
-    command = command + " ${isras_line} ${rac_path_line} ${rac_port_line} ${cfdtpath}  ${cluster1c_port_line} ${verbose_line}";
+    command = command + " ${isras_line} ${rac_path_line} ${rac_port_line} ${cfdtpath} ${cluster1c_name_line} ${cluster1c_port_line} ${verbose_line}";
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
