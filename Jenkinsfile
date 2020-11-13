@@ -37,7 +37,7 @@ pipeline {
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
-                            dbManage.dropSQLand1CDatabaseIfExists(env.SERVER_SQL, null, null, env.SERVER_1C, env.RAS_PORT,
+                            dbManage.dropDb(env.SERVER_1C, env.SERVER_1C_PORT, null, env.SERVER_1C, env.RAS_PORT,
                             env.CLUSTER_NAME_1C, env.DB_NAME, env.DB_NAME, false, false)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {

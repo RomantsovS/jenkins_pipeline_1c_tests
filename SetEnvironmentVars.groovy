@@ -15,13 +15,14 @@ if (isUnix()) {
     // env.ONE_SCRIPT_PATH="/usr/bin/oscript"
 } else {
     env.PLATFORM_1C_VERSION = "8.3.12"
-    env.INSTALLATION_DIR_1C = "\\\\rusklimat.ru\\app\\1Cv8ADM\\8.3.16.1063\\bin\\"
+    env.RAC_PATH = "\\\\rusklimat.ru\\app\\1Cv8ADM\\8.3.16.1063\\bin\\"
 }
 
 env.SERVER_SQL = "DB01"
 
-env.SERVER_1C = "cv8app12:1741"
-env.RAS_PORT = "1745"
+env.SERVER_1C = "cv8app12"
+env.SERVER_1C_PORT = "1741"
+env.RAC_PORT = "1745"
 env.CLUSTER_NAME_1C = "ERP TEST ENV"
 
 env.DB_NAME = "ERP_TEST_FOR_CI"

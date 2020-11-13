@@ -149,15 +149,25 @@ def createDatabase(serverSQL, userSQL, passwordSQL, rasHostnameOrIP, rasPort, cl
 // Параметры:
 //  platform - номер платформы 1С, например 8.3.12.1529
 //  server1c - сервер 1c
+//  server1Cport - порте кластера 1с
 //  serversql - сервер 1c 
-//  base - имя базы на сервере 1c и sql
+//  base_name - имя базы на сервере 1c и sql
 //  cfdt - файловый путь к dt или cf конфигурации для загрузки. Только для пакетного режима!
 //  isras - если true, то используется RAS для скрипта, в противном случае - пакетный режим
 //
-def createDB(platform, server1c, serversql, base, cfdt, isras) {
+def createDB(platform, server1c, serversql, base_name, cluster1c_port, cfdt, isras, rac_path, rac_port, verbose) {
     cfdtpath = ""
     if (cfdt != null && !cfdt.isEmpty()) {
         cfdtpath = "-cfdt ${cfdt}"
+    }
+
+    isras_line = ""
+    rac_path_line = "";
+    rac_port_line = "";
+    if (isras) {
+        isras_line = "-isras true"
+        rac_path_line = "-rac_path " + rac_path;
+        rac_port_line = "-rac_port " + rac_port;
     }
 
     platformLine = ""
@@ -165,15 +175,70 @@ def createDB(platform, server1c, serversql, base, cfdt, isras) {
         platformLine = "-platform ${platform}"
     }
 
-    def command = "oscript one_script_tools/dbcreator.os ${platformLine} -server1c ${server1c} -serversql ${serversql} -base ${base} ${cfdtpath}";
+    cluster1c_port_line = "";
+    if(cluster1c_port != null && !cluster1c_port.isEmpty()) {
+        cluster1c_port_line = "-cluster1c_port ${cluster1c_port}"
+    }
+
+    verbose_line = "";
+    if(verbose) {
+        verbose_line = "-verbose 1"
+    }
+
+    def command = "oscript one_script_tools/db_create.os ${platformLine} -server1c ${server1c} -serversql ${serversql} -base_name ${base_name}";
+    command = command + " ${isras_line} ${rac_path_line} ${rac_port_line} ${cfdtpath}  ${cluster1c_port_line} ${verbose_line}";
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
     
     if (returnCode != 0) {
-        commonMethods.echoAndError("Error creating DB ${base} at ${serversql}")
+        commonMethods.echoAndError("Error creating DB ${base_name} at ${serversql}")
     }
 }
+
+// Удаляет базу из кластера через RAC.
+//
+// Параметры:
+//  server1c - сервер 1с 
+//  serverSql - сервер sql
+//  base_name - база для удаления из кластера
+//  admin1cUser - имя администратора 1С в кластере для базы
+//  admin1cPwd - пароль администратора 1С в кластере для базы
+//  sqluser - юзер sql
+//  sqlPwd - пароль sql
+//  fulldrop - если true, то удаляется база из кластера 1С и sql сервера
+//
+def dropDb(platform, server1c, serversql, base_name, rac_path, rac_port, verbose, fulldrop = false) {
+
+    platformLine = ""
+    if (platformLine != null && !platformLine.isEmpty()) {
+        platformLine = "-platform ${platform}"
+    }
+
+    rac_path_line = "-rac_path " + rac_path;
+    rac_port_line = "-rac_port " + rac_port;
+
+    verbose_line = "";
+    if(verbose) {
+        verbose_line = "-verbose 1"
+    }
+
+    db_operation_line = "";
+    if(fulldrop) {
+        db_operation_line = "-db_operation drop";
+    }
+
+    def command = "oscript one_script_tools/db_drop.os ${platformLine} -server1c ${server1c} -serversql ${serversql} -base_name ${base_name}"
+    command = command + " ${rac_path_line} ${rac_port_line} ${db_operation_line} ${verbose_line}";
+    returnCode = commonMethods.cmdReturnStatusCode(command)
+    
+    echo "cmd status code $returnCode"
+    
+    if (returnCode != 0) {
+        commonMethods.echoAndError("Error deleting DB ${base} at ${serversql}")
+    }
+}
+
 
 def createFileDatabase(pathTo1CThickClient, databaseDirectory, deleteIfExits) {
     
