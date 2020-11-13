@@ -27,5 +27,5 @@ env.CLUSTER_NAME_1C = "\"ERP TEST ENV\""
 
 env.DB_NAME = "ERP_TEST_FOR_CI"
 
-env.delete_test_db = true;
-env.create_test_db = true;
+env.delete_test_db = 'Yes';
+env.create_test_db = 'No';
