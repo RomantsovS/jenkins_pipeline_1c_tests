@@ -25,6 +25,11 @@ pipeline {
                     commonMethods = load "./lib/CommonMethods.groovy" // Загружаем общий модуль
                     dbManage = load "./lib/DBManage.groovy"
                     sqlUtils = load "./lib/SqlUtils.groovy"
+
+                    // создаем пустые каталоги
+                    dir ('build') {
+                        writeFile file:'dummy', text:''
+                    }
                 }
             }
         }
