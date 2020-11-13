@@ -1,5 +1,3 @@
-package io.libs;
-
 // Проверяет соединение к БД и наличие базы
 //
 // Параметры:
@@ -27,7 +25,7 @@ def checkDb(dbServer, infobase, sqlUser, sqlPwd) {
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
-    
+
     if (returnCode != 0) {
         commonMethods.echoAndError("Возникла ошибка при при проверке соединения к sql базе ${dbServer}\\${infobase}. Для подробностей смотрите логи")
     }
