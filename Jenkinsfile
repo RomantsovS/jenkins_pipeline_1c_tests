@@ -1,7 +1,7 @@
 pipeline {
     parameters {
-        bolean(defaultValue: "${env.delete_test_db}", description: 'Условие удаления тестовой базы. По умолчанию Истина', name: 'delete_test_db')
-        bolean(defaultValue: "${env.create_test_db}", description: 'Условие создания тестовой базы. По умолчанию Истина', name: 'create_test_db')
+        boolean(defaultValue: "${env.delete_test_db}", description: 'Условие удаления тестовой базы. По умолчанию Истина', name: 'delete_test_db')
+        boolean(defaultValue: "${env.create_test_db}", description: 'Условие создания тестовой базы. По умолчанию Истина', name: 'create_test_db')
     }
 
     agent { label "dev1c" }
