@@ -28,7 +28,7 @@ pipeline {
         }
 
         stage("Delete test DB") {
-            when { expression {delete_test_db <> 'No'} }
+            when { expression {delete_test_db != 'No'} }
 
             options {
                 timeout(time: 15, unit: "MINUTES")
@@ -65,7 +65,7 @@ pipeline {
         }
 
         stage("Create test DB") {
-            when { expression {create_test_db <> 'No'} }
+            when { expression {create_test_db != 'No'} }
 
             options {
                 timeout(time: 15, unit: "MINUTES")
