@@ -37,8 +37,7 @@ pipeline {
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
-                            dbManage.dropDb(env.SERVER_1C, env.SERVER_1C_PORT, null, env.SERVER_1C, env.RAS_PORT,
-                            env.CLUSTER_NAME_1C, env.DB_NAME, env.DB_NAME, false, false)
+                            dbManage.dropDb(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.SERVER_SQL, env.DB_NAME, env.RAC_PATH, env.RAC_PORT, env.VERBOSE)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             echo "catched FlowInterruptedException"
@@ -72,7 +71,8 @@ pipeline {
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
-                            dbManage.createDB(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.SERVER_SQL, env.DB_NAME, null, false)
+                            dbManage.createDB(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.SERVER_SQL, env.DB_NAME, env.CLUSTER_1C_PORT, env.RAC_PATH,
+                            , true, env.RAC_PATH, env.RAC_PORT, env.VERBOSE)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             echo "catched FlowInterruptedException"

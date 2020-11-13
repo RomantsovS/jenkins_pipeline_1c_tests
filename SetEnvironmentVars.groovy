@@ -21,7 +21,7 @@ if (isUnix()) {
 env.SERVER_SQL = "DB01"
 
 env.SERVER_1C = "cv8app12"
-env.SERVER_1C_PORT = "1741"
+env.CLUSTER_1C_PORT = "1741"
 env.RAC_PORT = "1745"
 env.CLUSTER_NAME_1C = "ERP TEST ENV"
 
