@@ -63,3 +63,6 @@ def backupDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
         commonMethods.echoAndError("Возникла ошибки при создании бекапа sql базы ${dbServer}\\${infobase}. Для подробностей смотрите логи")
     }
 }
+
+// return this module as Groovy object
+return this
