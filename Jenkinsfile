@@ -118,7 +118,7 @@ pipeline {
                         try { timeout(time: 5, unit: 'MINUTES') { 
                             backupPath = "${env.WORKSPACE}/build/temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}"
 
-                            dbManage.backupTask(env.SERVER_SQL, env.DB_NAME_TEMPLATE, backupPath)
+                            dbManage.backupTask(env.SERVER_SQL, env.DB_NAME_TEMPLATE, backupPath, null, null)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             echo "catched FlowInterruptedException"
