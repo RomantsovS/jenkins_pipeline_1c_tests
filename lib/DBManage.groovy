@@ -192,7 +192,7 @@ def createDB(platform, server1c, serversql, base_name, cluster1c_port, cfdt, isr
     echo "cmd status code $returnCode"
     
     if (returnCode != 0) {
-        commonMethods.echoAndError("Error creating DB ${base_name} at ${serversql}")
+        commonMethods.echoAndError("Error creating DB ${base_name} at ${server1c}")
     }
 }
 
@@ -235,7 +235,7 @@ def dropDb(platform, server1c, cluster1c_name, serversql, base_name, rac_path, r
     echo "cmd status code $returnCode"
     
     if (returnCode != 0) {
-        commonMethods.echoAndError("Error deleting DB ${base} at ${serversql}")
+        commonMethods.echoAndError("Error deleting DB ${base} at ${server1c}")
     }
 }
 
