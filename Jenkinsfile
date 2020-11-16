@@ -34,7 +34,7 @@ pipeline {
 
                     backupPath = "${env.SQL_BACKUP_PATH}/temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}.bak"
 
-                    dbManage.delete_files(env.SERVER_SQL, backupPath, "", "")
+                    dbManage.delete_backup_files(env.SERVER_SQL, backupPath, "", "")
                 }
             }
         }
