@@ -251,8 +251,8 @@ def restoreTask(serverSql, infobase, backupPath, sqlUser, sqlPwd) {
     sqlUtils.restoreDb(serverSql, infobase, backupPath, sqlUser, sqlPwd)
 }
 
-def delete_backup_files(serverSql, backupPath, sqlUser, sqlPwd) {
-    sqlUtils.delete_backup_files(serverSql, backupPath, sqlUser, sqlPwd)
+def delete_backup_files(serverSql, backupFolder, sqlUser, sqlPwd) {
+    sqlUtils.delete_backup_files(serverSql, backupFolder, sqlUser, sqlPwd)
 }
 
 def createFileDatabase(pathTo1CThickClient, databaseDirectory, deleteIfExits) {

@@ -134,11 +134,11 @@ def restoreDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
 //
 // Параметры:
 //  dbServer - сервер БД
-//  backupPath - каталог бекапов
+//  backupFolder - каталог бекапов
 //  sqlUser - Необязательный. админ sql базы
 //  sqlPwd - Необязательный. пароль админа sql базы
 //
-def delete_backup_files(dbServer, backupPath, sqlUser, sqlPwd) {
+def delete_backup_files(dbServer, backupFolder, sqlUser, sqlPwd) {
 
     sqlUserpath = "" 
     if (sqlUser != null && !sqlUser.isEmpty()) {
@@ -152,13 +152,13 @@ def delete_backup_files(dbServer, backupPath, sqlUser, sqlPwd) {
         sqlPwdPath = "-P ${sqlPwd}"
     }
 
-    def command = "sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/sql/delete_files.sql\" -b -v folderPath =${backupPath}"
+    def command = "sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/sql/delete_files.sql\" -b -v folderPath =${backupFolder}"
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
 
     if (returnCode != 0) {
-         commonMethods.echoAndError("Возникла ошибка при удалении файлов бекапов ${dbServer}\\${infobase}. Для подробностей смотрите логи")
+         commonMethods.echoAndError("Возникла ошибка при удалении файлов бекапов ${dbServer}\\${backupFolder}. Для подробностей смотрите логи")
     } 
 }
 
