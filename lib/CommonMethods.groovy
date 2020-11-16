@@ -311,7 +311,7 @@ def max(ArrayList numbers) {
 //  String - сгенерированный timestamp
 //
 def currentDateStamp() {
-    dateFormat = new SimpleDateFormat("yyyyMMddmmss");
+    dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     date = new Date();
     return  dateFormat.format(date);
 }
