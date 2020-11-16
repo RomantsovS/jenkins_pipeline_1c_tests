@@ -152,7 +152,7 @@ def delete_backup_files(dbServer, backupFolder, sqlUser, sqlPwd) {
         sqlPwdPath = "-P ${sqlPwd}"
     }
 
-    def command = "sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/sql/delete_files.sql\" -b -v folderPath =${backupFolder}"
+    def command = "sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/sql/delete_files.sql\" -b -v folderPath =\"${backupFolder}\"""
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
