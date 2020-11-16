@@ -3,6 +3,7 @@ pipeline {
         choice(name: 'delete_test_db', choices: ['Yes', 'No'], description: 'Условие удаления тестовой базы. По умолчанию Истина')
         choice(name: 'create_test_db', choices: ['Yes', 'No'], description: 'Условие создания тестовой базы. По умолчанию Истина')
         choice(name: 'sql_backup_template', choices: ['Yes', 'No'], description: 'Условие выгрузки sql бекапа эталонной базы. По умолчанию Истина')
+        choice(name: 'sql_restore_template', choices: ['Yes', 'No'], description: 'Условие восстановления sql бекапа эталонной базы. По умолчанию Истина')
     }
 
     agent { label "dev1c" }
