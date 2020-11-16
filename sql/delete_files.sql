@@ -6,7 +6,7 @@ declare @subFolder int = 0; --0 to ignore subFolders, 1 to delete files in subFo
 
 set @folderPath = '$(folderPath)';
 
-if @folderPath == N''
+if @folderPath = N''
 	RAISERROR ('Error, incorrect path', 11, 1)
 
 declare @cmdpath nvarchar(60)
