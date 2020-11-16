@@ -92,7 +92,7 @@ def createEmptyDb(dbServer, infobase, sqlUser, sqlPwd) {
     echo "cmd status code $returnCode"
 
     if (returnCode != 0) {
-        utils.raiseError("Возникла ошибка при создании пустой sql базы на  ${dbServer}\\${infobase}. Для подробностей смотрите логи")
+        commonMethods.echoAndError("Возникла ошибка при создании пустой sql базы на  ${dbServer}\\${infobase}. Для подробностей смотрите логи")
     }
 }
 
@@ -107,7 +107,6 @@ def createEmptyDb(dbServer, infobase, sqlUser, sqlPwd) {
 //  sqlPwd - Необязательный. пароль админа sql базы
 //
 def restoreDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
-    utils = new Utils()
 
     sqlUserpath = "" 
     if (sqlUser != null && !sqlUser.isEmpty()) {
@@ -126,9 +125,9 @@ def restoreDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
-    
+
     if (returnCode != 0) {
-         utils.raiseError("Возникла ошибка при восстановлении базы из sql бекапа ${dbServer}\\${infobase}. Для подробностей смотрите логи")
+         commonMethods.echoAndError("Возникла ошибка при восстановлении базы из sql бекапа ${dbServer}\\${infobase}. Для подробностей смотрите логи")
     } 
 }
 
