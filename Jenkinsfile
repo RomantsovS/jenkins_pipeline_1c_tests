@@ -201,7 +201,7 @@ pipeline {
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
                             dbManage.updateDbTask(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_1C_PORT, env.DB_NAME,
-                            env.STORAGE_PATH, env.STORAGE_USR, env.STORAGE_PATH, env.1C_ADMIN_USER, env.1C_USER_PWD)
+                            env.STORAGE_PATH, env.STORAGE_USR, env.STORAGE_PATH, env.USER_1C, env.PWD_1C)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             echo "catched FlowInterruptedException"
