@@ -138,7 +138,7 @@ def restoreDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
 //  sqlUser - Необязательный. админ sql базы
 //  sqlPwd - Необязательный. пароль админа sql базы
 //
-def delete_files(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
+def delete_backup_files(dbServer, backupPath, sqlUser, sqlPwd) {
 
     sqlUserpath = "" 
     if (sqlUser != null && !sqlUser.isEmpty()) {
