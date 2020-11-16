@@ -243,7 +243,7 @@ def dropDb(platform, server1c, cluster1c_name, serversql, base_name, rac_path, r
 
 def backupTask(serverSql, infobase, backupPath, sqlUser, sqlPwd) {
     sqlUtils.checkDb(serverSql, infobase, sqlUser, sqlPwd)
-    //sqlUtils.backupDb(serverSql, infobase, backupPath, sqlUser, sqlPwd)
+    sqlUtils.backupDb(serverSql, infobase, backupPath, sqlUser, sqlPwd)
 }
 
 def createFileDatabase(pathTo1CThickClient, databaseDirectory, deleteIfExits) {
