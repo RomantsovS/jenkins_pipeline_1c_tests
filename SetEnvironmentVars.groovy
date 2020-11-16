@@ -29,3 +29,10 @@ env.DB_NAME = "ERP_TEST_FOR_CI"
 env.DB_NAME_TEMPLATE = env.DB_NAME + "_Template"
 
 env.SQL_BACKUP_PATH = "D:\\SQLBACKUP"
+
+env.STORAGE_PATH = "tcp://DB01/ERP"
+env.STORAGE_USR = "CI_Automation"
+env.STORAGE_PWD = ""
+
+env.1C_ADMIN_USER = "Administrator"
+env.1C_USER_PWD = ""

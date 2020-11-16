@@ -3,7 +3,8 @@ pipeline {
         choice(name: 'delete_test_db', choices: ['Yes', 'No'], description: 'Условие удаления тестовой базы. По умолчанию Истина')
         choice(name: 'create_test_db', choices: ['Yes', 'No'], description: 'Условие создания тестовой базы. По умолчанию Истина')
         choice(name: 'sql_backup_template', choices: ['Yes', 'No'], description: 'Условие выгрузки sql бекапа эталонной базы. По умолчанию Истина')
-        choice(name: 'sql_restore_template', choices: ['Yes', 'No'], description: 'Условие восстановления sql бекапа эталонной базы. По умолчанию Истина')
+        choice(name: 'sql_restore_template', choices: ['Yes', 'No'], description: 'Условие восстановления тестовой базы из sql бекапа эталонной базы. По умолчанию Истина')
+        choice(name: 'update_db_from_repo', choices: ['Yes', 'No'], description: 'Условие обновления тестовой базы из хранилища. По умолчанию Истина')
     }
 
     agent { label "dev1c" }
@@ -164,6 +165,43 @@ pipeline {
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
                             dbManage.restoreTask(env.SERVER_SQL, env.DB_NAME, backupPath, "", "")
+                        }}
+                        catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
+                            echo "catched FlowInterruptedException"
+
+                            if (commonMethods.isTimeoutException(excp)) {
+                                echo "isTimeoutException = true"
+                                commonMethods.throwTimeoutException("${STAGE_NAME}")
+                            }
+                        }
+                        catch (Throwable excp) {
+                            echo "catched Throwable"
+                            caughtException = excp
+                        }
+                    //}
+
+                    if (caughtException) {
+                        error caughtException.message
+                    }
+                }
+            }
+        }
+
+        stage("Update DB from repo") {
+            when { expression {update_db_from_repo != 'No'} }
+
+            options {
+                timeout(time: 5, unit: "MINUTES")
+            }
+
+            steps {
+                script {                    
+                    Exception caughtException = null
+
+                    //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
+                        try { timeout(time: 5, unit: 'MINUTES') { 
+                            dbManage.updateDbTask(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_1C_PORT, env.DB_NAME,
+                            env.STORAGE_PATH, env.STORAGE_USR, env.STORAGE_PATH, env.1C_ADMIN_USER, env.1C_USER_PWD)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             echo "catched FlowInterruptedException"

@@ -255,6 +255,42 @@ def delete_backup_files(serverSql, backupFolder, sqlUser, sqlPwd) {
     sqlUtils.delete_backup_files(serverSql, backupFolder, sqlUser, sqlPwd)
 }
 
+def updateDbTask(platform, server1c, cluster1c_port, base_name, storage1cPath, storageUser, storagePwd, admin1cUser, admin1cPwd) {
+    def connString = "/S${server1c}:${cluster1c_port}\\${base_name}"
+    
+    prHelpers.loadCfgFrom1CStorage(storage1cPath, storageUser, storagePwd, connString, admin1cUser, admin1cPwd, platform1c)
+    //prHelpers.updateInfobase(connString, admin1cUser, admin1cPwd, platform1c)
+}
+
+// Загружает в базу конфигурацию из 1С хранилища. Базу желательно подключить к хранилищу под загружаемым пользователем,
+//  т.к. это даст буст по скорости загрузки.
+//
+// Параметры:
+//
+//
+def loadCfgFrom1CStorage(storageTCP, storageUser, storagePwd, connString, admin1cUser, admin1cPassword, platform) {
+
+    storagePwdLine = ""
+    if (storagePwd != null && !storagePwd.isEmpty()) {
+        storagePwdLine = "--storage-pwd ${storagePwd}"
+    }
+
+    platformLine = ""
+    if (platform != null && !platform.isEmpty()) {
+        platformLine = "--v8version ${platform}"
+    }
+
+    def command = "vrunner loadrepo --storage-name ${storageTCP} --storage-user ${storageUser} ${storagePwdLine} --ibconnection ${connString} --db-user ${admin1cUser}"
+    command - command + " --db-pwd ${admin1cPassword} ${platformLine}"
+    returnCode = commonMethods.cmdReturnStatusCode(command)
+    
+    echo "cmd status code $returnCode"
+
+    if (returnCode != 0) {
+         commonMethods.echoAndError("Загрузка конфигурации из 1С хранилища ${storageTCP} завершилась с ошибкой. Для подробностей смотрите логи.")
+    }
+}
+
 def createFileDatabase(pathTo1CThickClient, databaseDirectory, deleteIfExits) {
     
     def commonErrorMsg = "Exception from DBManage.createFileDatabase:"
