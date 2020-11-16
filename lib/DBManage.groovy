@@ -217,6 +217,16 @@ def dropDb(platform, server1c, cluster1c_name, serversql, base_name, admin_1c_na
         platformLine = "-platform ${platform}"
     }
 
+    admin_1c_name_line = ""
+    if(admin_1c_name != null && !admin_1c_name.isEmpty()) {
+        admin_1c_name_line = -admin_1c_name ${admin_1c_name}
+    }
+
+    admin_1c_pwd_line = ""
+    if(admin_1c_pwd != null && !admin_1c_pwd.isEmpty()) {
+        admin_1c_pwd_line = -admin_1c_pwd ${admin_1c_pwd}
+    }
+
     rac_path_line = "-rac_path " + rac_path;
     rac_port_line = "-rac_port " + rac_port;
 
@@ -231,7 +241,7 @@ def dropDb(platform, server1c, cluster1c_name, serversql, base_name, admin_1c_na
     }
 
     def command = "oscript one_script_tools/db_drop.os ${platformLine} -server1c ${server1c} -cluster1c_name ${cluster1c_name} -serversql ${serversql}"
-    command = command + " -base_name ${base_name} -admin_1c_name ${admin_1c_name} -admin_1c_pwd ${admin_1c_pwd} ${rac_path_line} ${rac_port_line} ${db_operation_line}"
+    command = command + " -base_name ${base_name} ${admin_1c_name_line} ${admin_1c_pwd_line} ${rac_path_line} ${rac_port_line} ${db_operation_line}"
     command = command + " ${verbose_line}";
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
