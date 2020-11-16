@@ -34,5 +34,5 @@ env.STORAGE_PATH = "tcp://DB01/ERP"
 env.STORAGE_USR = "CI_Automation"
 env.STORAGE_PWD = ""
 
-env.USER_1C = "Administrator"
-env.PWD_1C = ""
+env.ADMIN_1C_NAME = "Administrator"
+env.ADMIN_1C_PWD = ""

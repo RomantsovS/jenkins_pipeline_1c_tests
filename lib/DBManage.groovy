@@ -210,7 +210,7 @@ def createDB(platform, server1c, serversql, base_name, cluster1c_port, cfdt, isr
 //  sqlPwd - пароль sql
 //  fulldrop - если true, то удаляется база из кластера 1С и sql сервера
 //
-def dropDb(platform, server1c, cluster1c_name, serversql, base_name, rac_path, rac_port, verbose, fulldrop = false) {
+def dropDb(platform, server1c, cluster1c_name, serversql, base_name, admin_1c_name, admin_1c_pwd, rac_path, rac_port, verbose, fulldrop = false) {
 
     platformLine = ""
     if (platform != null && !platform.isEmpty()) {
@@ -230,8 +230,9 @@ def dropDb(platform, server1c, cluster1c_name, serversql, base_name, rac_path, r
         db_operation_line = "-db_operation drop";
     }
 
-    def command = "oscript one_script_tools/db_drop.os ${platformLine} -server1c ${server1c} -cluster1c_name ${cluster1c_name} -serversql ${serversql} -base_name ${base_name}"
-    command = command + " ${rac_path_line} ${rac_port_line} ${db_operation_line} ${verbose_line}";
+    def command = "oscript one_script_tools/db_drop.os ${platformLine} -server1c ${server1c} -cluster1c_name ${cluster1c_name} -serversql ${serversql}"
+    command = command + " -base_name ${base_name} -admin_1c_name ${admin_1c_name} -admin_1c_pwd ${admin_1c_pwd} ${rac_path_line} ${rac_port_line} ${db_operation_line}"
+    command = command + " ${verbose_line}";
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
@@ -255,11 +256,11 @@ def delete_backup_files(serverSql, backupFolder, sqlUser, sqlPwd) {
     sqlUtils.delete_backup_files(serverSql, backupFolder, sqlUser, sqlPwd)
 }
 
-def updateDbTask(platform, server1c, cluster1c_port, base_name, storage1cPath, storageUser, storagePwd, admin1cUser, admin1cPwd) {
+def updateDbTask(platform, server1c, cluster1c_port, base_name, storage1cPath, storageUser, storagePwd, admin_1c_name, admin_1c_pwd) {
     def connString = "/S${server1c}:${cluster1c_port}\\${base_name}"
     
-    prHelpers.loadCfgFrom1CStorage(storage1cPath, storageUser, storagePwd, connString, admin1cUser, admin1cPwd, platform1c)
-    //prHelpers.updateInfobase(connString, admin1cUser, admin1cPwd, platform1c)
+    loadCfgFrom1CStorage(storage1cPath, storageUser, storagePwd, connString, admin_1c_name, admin_1c_pwd, platform1c)
+    //updateInfobase(connString, admin_1c_name, admin_1c_pwd, platform1c)
 }
 
 // Загружает в базу конфигурацию из 1С хранилища. Базу желательно подключить к хранилищу под загружаемым пользователем,
@@ -268,7 +269,7 @@ def updateDbTask(platform, server1c, cluster1c_port, base_name, storage1cPath, s
 // Параметры:
 //
 //
-def loadCfgFrom1CStorage(storageTCP, storageUser, storagePwd, connString, admin1cUser, admin1cPassword, platform) {
+def loadCfgFrom1CStorage(storageTCP, storageUser, storagePwd, connString, admin_1c_name, admin_1c_pwd, platform) {
 
     storagePwdLine = ""
     if (storagePwd != null && !storagePwd.isEmpty()) {
@@ -280,8 +281,8 @@ def loadCfgFrom1CStorage(storageTCP, storageUser, storagePwd, connString, admin1
         platformLine = "--v8version ${platform}"
     }
 
-    def command = "vrunner loadrepo --storage-name ${storageTCP} --storage-user ${storageUser} ${storagePwdLine} --ibconnection ${connString} --db-user ${admin1cUser}"
-    command - command + " --db-pwd ${admin1cPassword} ${platformLine}"
+    def command = "vrunner loadrepo --storage-name ${storageTCP} --storage-user ${storageUser} ${storagePwdLine} --ibconnection ${connString} --db-user ${admin_1c_name}"
+    command - command + " --db-pwd ${admin_1c_pwd} ${platformLine}"
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
