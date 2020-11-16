@@ -163,7 +163,7 @@ pipeline {
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
-                            dbManage.createEmptyDb(env.SERVER_SQL, env.DB_NAME, backupPath, "", "")
+                            dbManage.restoreTask(env.SERVER_SQL, env.DB_NAME, backupPath, "", "")
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             echo "catched FlowInterruptedException"
