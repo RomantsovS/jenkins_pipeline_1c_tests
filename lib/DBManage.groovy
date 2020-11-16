@@ -219,12 +219,12 @@ def dropDb(platform, server1c, cluster1c_name, serversql, base_name, admin_1c_na
 
     admin_1c_name_line = ""
     if(admin_1c_name != null && !admin_1c_name.isEmpty()) {
-        admin_1c_name_line = -admin_1c_name ${admin_1c_name}
+        admin_1c_name_line = "-admin_1c_name ${admin_1c_name}"
     }
 
     admin_1c_pwd_line = ""
     if(admin_1c_pwd != null && !admin_1c_pwd.isEmpty()) {
-        admin_1c_pwd_line = -admin_1c_pwd ${admin_1c_pwd}
+        admin_1c_pwd_line = "-admin_1c_pwd ${admin_1c_pwd}"
     }
 
     rac_path_line = "-rac_path " + rac_path;
