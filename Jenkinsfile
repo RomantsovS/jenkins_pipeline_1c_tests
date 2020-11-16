@@ -121,7 +121,7 @@ pipeline {
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
-                            backupPath = "${env.WORKSPACE}\build\temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}"
+                            backupPath = "${env.WORKSPACE}/build/temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}"
 
                             dbManage.backupTask(env.SERVER_SQL, env.DB_NAME_TEMPLATE, backupPath, "", "")
                         }}
