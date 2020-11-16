@@ -111,7 +111,7 @@ pipeline {
             }
         }
 
-        stage("Sql backup template") {
+        stage("Sql backup template DB") {
             when { expression {sql_backup_template != 'No'} }
 
             options {
@@ -147,7 +147,7 @@ pipeline {
             }
         }
 
-        stage("Sql restore template") {
+        stage("Sql restore template DB") {
             when { expression {sql_restore_template != 'No'} }
 
             options {
@@ -160,7 +160,7 @@ pipeline {
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
-                            dbManage.createEmptyDb(env.SERVER_SQL, env.DB_NAME_TEMPLATE, backupPath, "", "")
+                            dbManage.restoreTask(env.SERVER_SQL, env.DB_NAME, backupPath, "", "")
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             echo "catched FlowInterruptedException"
