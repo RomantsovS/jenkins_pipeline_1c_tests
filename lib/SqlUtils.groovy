@@ -99,7 +99,6 @@ def createEmptyDb(dbServer, infobase, sqlUser, sqlPwd) {
 // Восстанавливает базу из бекапа
 //
 // Параметры:
-//  utils - экземпляр библиотеки Utils.groovy
 //  dbServer - сервер БД
 //  infobase - имя базы на сервере БД
 //  backupPath - каталог бекапов
@@ -131,6 +130,37 @@ def restoreDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
     } 
 }
 
+// EУдалять файлы бекапов через sql
+//
+// Параметры:
+//  dbServer - сервер БД
+//  backupPath - каталог бекапов
+//  sqlUser - Необязательный. админ sql базы
+//  sqlPwd - Необязательный. пароль админа sql базы
+//
+def delete_files(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
+
+    sqlUserpath = "" 
+    if (sqlUser != null && !sqlUser.isEmpty()) {
+        sqlUserpath = "-U ${sqlUser}"
+    } else {
+        sqlUserpath = "-E"
+    }
+
+    sqlPwdPath = "" 
+    if (sqlPwd != null && !sqlPwd.isEmpty()) {
+        sqlPwdPath = "-P ${sqlPwd}"
+    }
+
+    def command = "sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/sql/delete_files.sql\" -b -v folderPath =${folderPath}"
+    returnCode = commonMethods.cmdReturnStatusCode(command)
+    
+    echo "cmd status code $returnCode"
+
+    if (returnCode != 0) {
+         commonMethods.echoAndError("Возникла ошибка при удалении файлов бекапов ${dbServer}\\${infobase}. Для подробностей смотрите логи")
+    } 
+}
 
 // return this module as Groovy object
 return this

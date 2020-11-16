@@ -32,7 +32,9 @@ pipeline {
                         writeFile file:'dummy', text:''
                     }
 
-                    backupPath = "${env.SQL_BACKUP_PATH}/temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}"
+                    backupPath = "${env.SQL_BACKUP_PATH}/temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}.bak"
+
+                    dbManage.delete_files(env.SERVER_SQL, backupPath, "", "")
                 }
             }
         }
@@ -160,7 +162,7 @@ pipeline {
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
-                            dbManage.restoreTask(env.SERVER_SQL, env.DB_NAME, backupPath, "", "")
+                            dbManage.createEmptyDb(env.SERVER_SQL, env.DB_NAME, backupPath, "", "")
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             echo "catched FlowInterruptedException"
