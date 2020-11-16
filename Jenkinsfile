@@ -30,6 +30,8 @@ pipeline {
                     dir ('build') {
                         writeFile file:'dummy', text:''
                     }
+
+                    backupPath = "${env.SQL_BACKUP_PATH}/temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}"
                 }
             }
         }
@@ -108,7 +110,7 @@ pipeline {
             }
         }
 
-        stage("sql backup template") {
+        stage("Sql backup template") {
             when { expression {sql_backup_template != 'No'} }
 
             options {
@@ -120,10 +122,44 @@ pipeline {
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: 5, unit: 'MINUTES') { 
-                            backupPath = "${env.SQL_BACKUP_PATH}/temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}"
-
+                        try { timeout(time: 5, unit: 'MINUTES') {
                             dbManage.backupTask(env.SERVER_SQL, env.DB_NAME_TEMPLATE, backupPath, "", "")
+                        }}
+                        catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
+                            echo "catched FlowInterruptedException"
+
+                            if (commonMethods.isTimeoutException(excp)) {
+                                echo "isTimeoutException = true"
+                                commonMethods.throwTimeoutException("${STAGE_NAME}")
+                            }
+                        }
+                        catch (Throwable excp) {
+                            echo "catched Throwable"
+                            caughtException = excp
+                        }
+                    //}
+
+                    if (caughtException) {
+                        error caughtException.message
+                    }
+                }
+            }
+        }
+
+        stage("Sql restore template") {
+            when { expression {sql_restore_template != 'No'} }
+
+            options {
+                timeout(time: 5, unit: "MINUTES")
+            }
+
+            steps {
+                script {                    
+                    Exception caughtException = null
+
+                    //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
+                        try { timeout(time: 5, unit: 'MINUTES') { 
+                            dbManage.createEmptyDb(env.SERVER_SQL, env.DB_NAME_TEMPLATE, backupPath, "", "")
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             echo "catched FlowInterruptedException"

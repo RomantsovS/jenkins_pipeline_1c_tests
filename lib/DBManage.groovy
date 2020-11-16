@@ -246,6 +246,11 @@ def backupTask(serverSql, infobase, backupPath, sqlUser, sqlPwd) {
     sqlUtils.backupDb(serverSql, infobase, backupPath, sqlUser, sqlPwd)
 }
 
+def restoreTask(serverSql, infobase, backupPath, sqlUser, sqlPwd) {
+    sqlUtils.createEmptyDb(serverSql, infobase, sqlUser, sqlPwd)
+    sqlUtils.restoreDb(serverSql, infobase, backupPath, sqlUser, sqlPwd)
+}
+
 def createFileDatabase(pathTo1CThickClient, databaseDirectory, deleteIfExits) {
     
     def commonErrorMsg = "Exception from DBManage.createFileDatabase:"
