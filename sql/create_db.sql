@@ -7,6 +7,6 @@ begin
 	declare @sqltext nvarchar(50);
 	set @sqltext = 'create database '+@mydb;
 	exec(@sqltext)
+end
 else
 	PRINT N'DB already exists.';
-end
