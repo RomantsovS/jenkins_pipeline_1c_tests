@@ -90,10 +90,46 @@ def createEmptyDb(dbServer, infobase, sqlUser, sqlPwd) {
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
-    
+
     if (returnCode != 0) {
         utils.raiseError("Возникла ошибка при создании пустой sql базы на  ${dbServer}\\${infobase}. Для подробностей смотрите логи")
     }
+}
+
+// Восстанавливает базу из бекапа
+//
+// Параметры:
+//  utils - экземпляр библиотеки Utils.groovy
+//  dbServer - сервер БД
+//  infobase - имя базы на сервере БД
+//  backupPath - каталог бекапов
+//  sqlUser - Необязательный. админ sql базы
+//  sqlPwd - Необязательный. пароль админа sql базы
+//
+def restoreDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
+    utils = new Utils()
+
+    sqlUserpath = "" 
+    if (sqlUser != null && !sqlUser.isEmpty()) {
+        sqlUserpath = "-U ${sqlUser}"
+    } else {
+        sqlUserpath = "-E"
+    }
+
+    sqlPwdPath = "" 
+    if (sqlPwd != null && !sqlPwd.isEmpty()) {
+        sqlPwdPath = "-P ${sqlPwd}"
+    }
+
+    def command = "sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/copy_etalon/restore.sql\" -b -v restoreddb =${infobase}"
+    command = command + " -v bakfile=\"${backupPath}\""
+    returnCode = commonMethods.cmdReturnStatusCode(command)
+    
+    echo "cmd status code $returnCode"
+    
+    if (returnCode != 0) {
+         utils.raiseError("Возникла ошибка при восстановлении базы из sql бекапа ${dbServer}\\${infobase}. Для подробностей смотрите логи")
+    } 
 }
 
 
