@@ -58,10 +58,73 @@ pipeline {
                             env.ADMIN_1C_PWD, env.RAC_PATH, env.RAC_PORT, env.VERBOSE)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
-                            echo "catched FlowInterruptedException"
-
                             if (commonMethods.isTimeoutException(excp)) {
-                                echo "isTimeoutException = true"
+                                commonMethods.throwTimeoutException("${STAGE_NAME}")
+                            }
+                        }
+                        catch (Throwable excp) {
+                            echo "catched Throwable"
+                            caughtException = excp
+                        }
+                    //}
+
+                    if (caughtException) {
+                        error caughtException.message
+                    }
+                }
+            }
+        }
+
+        stage("Sql backup template DB") {
+            when { expression {sql_backup_template != 'No'} }
+
+            options {
+                timeout(time: 5, unit: "MINUTES")
+            }
+
+            steps {
+                script {                    
+                    Exception caughtException = null
+
+                    //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
+                        try { timeout(time: 5, unit: 'MINUTES') {
+                            dbManage.backupTask(env.SERVER_SQL, env.DB_NAME_TEMPLATE, backupPath, "", "")
+                        }}
+                        catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
+                            if (commonMethods.isTimeoutException(excp)) {
+                                commonMethods.throwTimeoutException("${STAGE_NAME}")
+                            }
+                        }
+                        catch (Throwable excp) {
+                            echo "catched Throwable"
+                            caughtException = excp
+                        }
+                    //}
+
+                    if (caughtException) {
+                        error caughtException.message
+                    }
+                }
+            }
+        }
+
+        stage("Sql restore template DB") {
+            when { expression {sql_restore_template != 'No'} }
+
+            options {
+                timeout(time: 5, unit: "MINUTES")
+            }
+
+            steps {
+                script {                    
+                    Exception caughtException = null
+
+                    //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
+                        try { timeout(time: 5, unit: 'MINUTES') { 
+                            dbManage.restoreTask(env.SERVER_SQL, env.DB_NAME, backupPath, "", "")
+                        }}
+                        catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
+                            if (commonMethods.isTimeoutException(excp)) {
                                 commonMethods.throwTimeoutException("${STAGE_NAME}")
                             }
                         }
@@ -95,10 +158,7 @@ pipeline {
                             env.CLUSTER_1C_PORT, null, false, env.RAC_PATH, env.RAC_PORT, env.CLUSTER_NAME_1C, env.VERBOSE)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
-                            echo "catched FlowInterruptedException"
-
                             if (commonMethods.isTimeoutException(excp)) {
-                                echo "isTimeoutException = true"
                                 commonMethods.throwTimeoutException("${STAGE_NAME}")
                             }
                         }
@@ -114,79 +174,7 @@ pipeline {
                 }
             }
         }
-
-        stage("Sql backup template DB") {
-            when { expression {sql_backup_template != 'No'} }
-
-            options {
-                timeout(time: 5, unit: "MINUTES")
-            }
-
-            steps {
-                script {                    
-                    Exception caughtException = null
-
-                    //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: 5, unit: 'MINUTES') {
-                            dbManage.backupTask(env.SERVER_SQL, env.DB_NAME_TEMPLATE, backupPath, "", "")
-                        }}
-                        catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
-                            echo "catched FlowInterruptedException"
-
-                            if (commonMethods.isTimeoutException(excp)) {
-                                echo "isTimeoutException = true"
-                                commonMethods.throwTimeoutException("${STAGE_NAME}")
-                            }
-                        }
-                        catch (Throwable excp) {
-                            echo "catched Throwable"
-                            caughtException = excp
-                        }
-                    //}
-
-                    if (caughtException) {
-                        error caughtException.message
-                    }
-                }
-            }
-        }
-
-        stage("Sql restore template DB") {
-            when { expression {sql_restore_template != 'No'} }
-
-            options {
-                timeout(time: 5, unit: "MINUTES")
-            }
-
-            steps {
-                script {                    
-                    Exception caughtException = null
-
-                    //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: 5, unit: 'MINUTES') { 
-                            dbManage.restoreTask(env.SERVER_SQL, env.DB_NAME, backupPath, "", "")
-                        }}
-                        catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
-                            echo "catched FlowInterruptedException"
-
-                            if (commonMethods.isTimeoutException(excp)) {
-                                echo "isTimeoutException = true"
-                                commonMethods.throwTimeoutException("${STAGE_NAME}")
-                            }
-                        }
-                        catch (Throwable excp) {
-                            echo "catched Throwable"
-                            caughtException = excp
-                        }
-                    //}
-
-                    if (caughtException) {
-                        error caughtException.message
-                    }
-                }
-            }
-        }
-
+        
         stage("Update DB from repo") {
             when { expression {update_db_from_repo != 'No'} }
 
@@ -204,10 +192,7 @@ pipeline {
                             env.STORAGE_PATH, env.STORAGE_USR, env.STORAGE_PATH, env.ADMIN_1C_NAME, env.ADMIN_1C_PWD)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
-                            echo "catched FlowInterruptedException"
-
                             if (commonMethods.isTimeoutException(excp)) {
-                                echo "isTimeoutException = true"
                                 commonMethods.throwTimeoutException("${STAGE_NAME}")
                             }
                         }
