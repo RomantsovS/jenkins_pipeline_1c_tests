@@ -120,7 +120,7 @@ def restoreDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
         sqlPwdPath = "-P ${sqlPwd}"
     }
 
-    def command = "sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/copy_etalon/restore.sql\" -b -v restoreddb =${infobase}"
+    def command = "sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/sql/restore_db.sql\" -b -v restoreddb =${infobase}"
     command = command + " -v bakfile=\"${backupPath}\""
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
