@@ -266,7 +266,7 @@ def delete_backup_files(serverSql, backupFolder, sqlUser, sqlPwd) {
     sqlUtils.delete_backup_files(serverSql, backupFolder, sqlUser, sqlPwd)
 }
 
-def updateDbTask(platform, server1c, cluster1c_port, base_name, storage1cPath, storageUser, storagePwd, admin_1c_name, admin_1c_pwd) {
+def updateDbTask(platform1c, server1c, cluster1c_port, base_name, storage1cPath, storageUser, storagePwd, admin_1c_name, admin_1c_pwd) {
     def connString = "/S${server1c}:${cluster1c_port}\\${base_name}"
     
     loadCfgFrom1CStorage(storage1cPath, storageUser, storagePwd, connString, admin_1c_name, admin_1c_pwd, platform1c)
