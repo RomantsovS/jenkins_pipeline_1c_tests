@@ -9,8 +9,4 @@ set @folderPath = '$(folderPath)';
 if @folderPath = N''
 	RAISERROR ('Error, incorrect path', 11, 1)
 
-declare @cmdpath nvarchar(60)
-set @cmdpath = 'MD '+ @folderPath
-exec master.dbo.xp_cmdshell @cmdpath
-
 EXECUTE master.dbo.xp_delete_file @typeFile, @folderPath, @fileExtension, @subFolder;
