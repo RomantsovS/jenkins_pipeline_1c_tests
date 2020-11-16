@@ -9,4 +9,4 @@ set @folderPath = '$(folderPath)';
 if @folderPath = N''
 	RAISERROR ('Error, incorrect path', 11, 1)
 
-EXECUTE master.dbo.xp_delete_file @typeFile, @folderPath, @fileExtension, @subFolder;
+EXECUTE master.dbo.xp_delete_file @typeFile, @folderPath, @fileExtension, @cutOffDate, @subFolder;
