@@ -179,7 +179,7 @@ pipeline {
             when { expression {update_db_from_repo != 'No'} }
 
             options {
-                timeout(time: 5, unit: "MINUTES")
+                timeout(time: 60, unit: "MINUTES")
             }
 
             steps {
