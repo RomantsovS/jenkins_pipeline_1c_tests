@@ -279,7 +279,7 @@ def updateDbTask(platform1c, server1c, cluster1c_port, base_name, storage1cPath,
 // Параметры:
 //
 //
-def loadCfgFrom1CStorage(storageTCP, storageUser, storagePwd, connString, admin_1c_name, admin_1c_pwd, platform) {
+def loadCfgFrom1CStorage(storage1cPath, storageUser, storagePwd, connString, admin_1c_name, admin_1c_pwd, platform) {
 
     storagePwdLine = ""
     if (storagePwd != null && !storagePwd.isEmpty()) {
@@ -296,14 +296,14 @@ def loadCfgFrom1CStorage(storageTCP, storageUser, storagePwd, connString, admin_
         admin_1c_pwd_line = "--db-pwd ${admin_1c_pwd}"
     }
 
-    def command = "vrunner loadrepo --storage-name ${storageTCP} --storage-user ${storageUser} ${storagePwdLine} --ibconnection ${connString} --db-user ${admin_1c_name}"
+    def command = "vrunner loadrepo --storage-name ${storage1cPath} --storage-user ${storageUser} ${storagePwdLine} --ibconnection ${connString} --db-user ${admin_1c_name}"
     command - command + " ${admin_1c_pwd_line} ${platformLine}"
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
 
     if (returnCode != 0) {
-         commonMethods.echoAndError("Загрузка конфигурации из 1С хранилища ${storageTCP} завершилась с ошибкой. Для подробностей смотрите логи.")
+         commonMethods.echoAndError("Загрузка конфигурации из 1С хранилища ${storage1cPath} завершилась с ошибкой. Для подробностей смотрите логи.")
     }
 }
 

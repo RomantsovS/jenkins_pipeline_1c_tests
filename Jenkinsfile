@@ -4,7 +4,7 @@ pipeline {
         choice(name: 'sql_backup_template', choices: ['Yes', 'No'], description: 'Условие выгрузки sql бекапа эталонной базы. По умолчанию Истина')
         choice(name: 'sql_restore_template', choices: ['Yes', 'No'], description: 'Условие восстановления тестовой базы из sql бекапа эталонной базы. По умолчанию Истина')
         choice(name: 'create_test_db', choices: ['Yes', 'No'], description: 'Условие создания тестовой базы. По умолчанию Истина')
-        choice(name: 'update_db_from_repo', choices: ['Yes', 'No'], description: 'Условие обновления тестовой базы из хранилища. По умолчанию Истина')
+        choice(name: 'update_test_db_from_repo', choices: ['Yes', 'No'], description: 'Условие обновления тестовой базы из хранилища. По умолчанию Истина')
     }
 
     agent { label "dev1c" }
@@ -12,13 +12,13 @@ pipeline {
     options { 
         buildDiscarder(logRotator(numToKeepStr: '7'))
         timestamps()
-        timeout(time: 1, unit: 'HOURS')
+        timeout(time: env.TIMEOUT_FOR_ALL_SCENARIO, unit: 'MINUTES')
     }
     
     stages {
         stage("Init") {
             options {
-                timeout(time: 1, unit: "MINUTES")
+                timeout(time: ${enc.TIMEOUT_FOR_INIT_STAGE}, unit: "MINUTES")
             }
 
             steps {
@@ -45,7 +45,7 @@ pipeline {
             when { expression {delete_test_db != 'No'} }
 
             options {
-                timeout(time: 3, unit: "MINUTES")
+                timeout(time: ${env.TIMEOUT_FOR_DELETE_TEST_DB_STAGE}, unit: "MINUTES")
             }
 
             steps {
@@ -79,7 +79,7 @@ pipeline {
             when { expression {sql_backup_template != 'No'} }
 
             options {
-                timeout(time: 5, unit: "MINUTES")
+                timeout(time: ${env.TIMEOUT_FOR_SQL_BACKUP_TEMPLATE_DB}, unit: "MINUTES")
             }
 
             steps {
@@ -112,7 +112,7 @@ pipeline {
             when { expression {sql_restore_template != 'No'} }
 
             options {
-                timeout(time: 5, unit: "MINUTES")
+                timeout(time: ${env.TIMEOUT_FOR_SQL_RESTORE_TEMPLATE_DB}, unit: "MINUTES")
             }
 
             steps {
@@ -145,7 +145,7 @@ pipeline {
             when { expression {create_test_db != 'No'} }
 
             options {
-                timeout(time: 5, unit: "MINUTES")
+                timeout(time: ${env.TIMEOUT_FOR_CREATE_TEST_DB}, unit: "MINUTES")
             }
 
             steps {
@@ -175,11 +175,11 @@ pipeline {
             }
         }
 
-        stage("Update DB from repo") {
-            when { expression {update_db_from_repo != 'No'} }
+        stage("Update test DB from repo") {
+            when { expression {update_test_db_from_repo != 'No'} }
 
             options {
-                timeout(time: 60, unit: "MINUTES")
+                timeout(time: ${env.TIMEOUT_FOR_UPDATE_TEST_DB_FROM_REPO}, unit: "MINUTES")
             }
 
             steps {
@@ -189,7 +189,7 @@ pipeline {
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: 5, unit: 'MINUTES') { 
                             dbManage.updateDbTask(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_1C_PORT, env.DB_NAME,
-                            env.STORAGE_PATH, env.STORAGE_USR, env.STORAGE_PATH, env.ADMIN_1C_NAME, env.ADMIN_1C_PWD)
+                            env.STORAGE_PATH, env.STORAGE_USR, env.STORAGE_PWD, env.ADMIN_1C_NAME, env.ADMIN_1C_PWD)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             if (commonMethods.isTimeoutException(excp)) {
