@@ -21,7 +21,7 @@ pipeline {
                 script {
                     Exception caughtException = null
 
-                    try { timeout(time: "${env.TIMEOUT_FOR_INIT_STAGE}", unit: 'MINUTES') {
+                    try { timeout(time: env.TIMEOUT_FOR_INIT_STAGE.toInteger(), unit: 'MINUTES') {
                         load "./SetEnvironmentVars.groovy"   // Загружаем переменные окружения (настойки)
                         commonMethods = load "./lib/CommonMethods.groovy" // Загружаем общий модуль
                         dbManage = load "./lib/DBManage.groovy"
@@ -62,7 +62,7 @@ pipeline {
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: "${env.TIMEOUT_FOR_DELETE_TEST_DB_STAGE}", unit: 'MINUTES') { 
+                        try { timeout(time: env.TIMEOUT_FOR_DELETE_TEST_DB_STAGE.toInteger(), unit: 'MINUTES') { 
                             dbManage.dropDb(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_NAME_1C, env.SERVER_SQL, env.DB_NAME, env.ADMIN_1C_NAME, 
                             env.ADMIN_1C_PWD, env.RAC_PATH, env.RAC_PORT, env.VERBOSE)
                         }}
@@ -92,7 +92,7 @@ pipeline {
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: "${env.TIMEOUT_FOR_SQL_BACKUP_TEMPLATE_DB}", unit: 'MINUTES') {
+                        try { timeout(time: env.TIMEOUT_FOR_SQL_BACKUP_TEMPLATE_DB.toInteger(), unit: 'MINUTES') {
                             dbManage.backupTask(env.SERVER_SQL, env.DB_NAME_TEMPLATE, backupPath, "", "")
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
@@ -121,7 +121,7 @@ pipeline {
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: "${env.TIMEOUT_FOR_SQL_RESTORE_TEMPLATE_DB}", unit: 'MINUTES') { 
+                        try { timeout(time: env.TIMEOUT_FOR_SQL_RESTORE_TEMPLATE_DB.toInteger(), unit: 'MINUTES') { 
                             dbManage.restoreTask(env.SERVER_SQL, env.DB_NAME, backupPath, "", "")
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
@@ -150,7 +150,7 @@ pipeline {
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: "${env.TIMEOUT_FOR_CREATE_TEST_DB}", unit: 'MINUTES') { 
+                        try { timeout(time: env.TIMEOUT_FOR_CREATE_TEST_DB.toInteger(), unit: 'MINUTES') { 
                             dbManage.createDB(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.SERVER_SQL, env.DB_NAME,
                             env.CLUSTER_1C_PORT, null, false, env.RAC_PATH, env.RAC_PORT, env.CLUSTER_NAME_1C, env.VERBOSE)
                         }}
@@ -180,7 +180,7 @@ pipeline {
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: "${env.TIMEOUT_FOR_UPDATE_TEST_DB_FROM_REPO}", unit: 'MINUTES') { 
+                        try { timeout(time: env.TIMEOUT_FOR_UPDATE_TEST_DB_FROM_REPO.toInteger(), unit: 'MINUTES') { 
                             dbManage.updateDbTask(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_1C_PORT, env.DB_NAME,
                             env.STORAGE_PATH, env.STORAGE_USR, env.STORAGE_PWD, env.ADMIN_1C_NAME, env.ADMIN_1C_PWD)
                         }}
