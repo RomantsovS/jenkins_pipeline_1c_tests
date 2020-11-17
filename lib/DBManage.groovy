@@ -291,8 +291,13 @@ def loadCfgFrom1CStorage(storageTCP, storageUser, storagePwd, connString, admin_
         platformLine = "--v8version ${platform}"
     }
 
+    admin_1c_pwd_line = ""
+    if (admin_1c_pwd != null && !admin_1c_pwd.isEmpty()) {
+        admin_1c_pwd_line = "--db-pwd ${admin_1c_pwd}"
+    }
+
     def command = "vrunner loadrepo --storage-name ${storageTCP} --storage-user ${storageUser} ${storagePwdLine} --ibconnection ${connString} --db-user ${admin_1c_name}"
-    command - command + " --db-pwd ${admin_1c_pwd} ${platformLine}"
+    command - command + " ${admin_1c_pwd_line} ${platformLine}"
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
