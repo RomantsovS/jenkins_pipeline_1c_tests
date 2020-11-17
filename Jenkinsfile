@@ -12,13 +12,13 @@ pipeline {
     options { 
         buildDiscarder(logRotator(numToKeepStr: '7'))
         timestamps()
-        timeout(time: env.TIMEOUT_FOR_ALL_SCENARIO, unit: 'MINUTES')
+        timeout(time: "${env.TIMEOUT_FOR_ALL_SCENARIO}", unit: 'MINUTES')
     }
     
     stages {
         stage("Init") {
             options {
-                timeout(time: ${enc.TIMEOUT_FOR_INIT_STAGE}, unit: "MINUTES")
+                timeout(time: ${env.TIMEOUT_FOR_INIT_STAGE}, unit: "MINUTES")
             }
 
             steps {
