@@ -21,7 +21,7 @@ pipeline {
                 script {
                     Exception caughtException = null
 
-                    try { timeout(time: env.TIMEOUT_FOR_INIT_STAGE.toInteger(), unit: 'MINUTES') {
+                    try { timeout(time: 3, unit: 'MINUTES') {
                         load "./SetEnvironmentVars.groovy"   // Загружаем переменные окружения (настойки)
                         commonMethods = load "./lib/CommonMethods.groovy" // Загружаем общий модуль
                         dbManage = load "./lib/DBManage.groovy"
