@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage("Init") {
             options {
-                timeout(time: ${env.TIMEOUT_FOR_INIT_STAGE}, unit: "MINUTES")
+                timeout(time: "${env.TIMEOUT_FOR_INIT_STAGE}", unit: "MINUTES")
             }
 
             steps {
@@ -45,7 +45,7 @@ pipeline {
             when { expression {delete_test_db != 'No'} }
 
             options {
-                timeout(time: ${env.TIMEOUT_FOR_DELETE_TEST_DB_STAGE}, unit: "MINUTES")
+                timeout(time: "${env.TIMEOUT_FOR_DELETE_TEST_DB_STAGE}", unit: "MINUTES")
             }
 
             steps {
@@ -79,7 +79,7 @@ pipeline {
             when { expression {sql_backup_template != 'No'} }
 
             options {
-                timeout(time: ${env.TIMEOUT_FOR_SQL_BACKUP_TEMPLATE_DB}, unit: "MINUTES")
+                timeout(time: "${env.TIMEOUT_FOR_SQL_BACKUP_TEMPLATE_DB}", unit: "MINUTES")
             }
 
             steps {
@@ -112,7 +112,7 @@ pipeline {
             when { expression {sql_restore_template != 'No'} }
 
             options {
-                timeout(time: ${env.TIMEOUT_FOR_SQL_RESTORE_TEMPLATE_DB}, unit: "MINUTES")
+                timeout(time: "${env.TIMEOUT_FOR_SQL_RESTORE_TEMPLATE_DB}", unit: "MINUTES")
             }
 
             steps {
@@ -145,7 +145,7 @@ pipeline {
             when { expression {create_test_db != 'No'} }
 
             options {
-                timeout(time: ${env.TIMEOUT_FOR_CREATE_TEST_DB}, unit: "MINUTES")
+                timeout(time: "${env.TIMEOUT_FOR_CREATE_TEST_DB}", unit: "MINUTES")
             }
 
             steps {
@@ -179,7 +179,7 @@ pipeline {
             when { expression {update_test_db_from_repo != 'No'} }
 
             options {
-                timeout(time: ${env.TIMEOUT_FOR_UPDATE_TEST_DB_FROM_REPO}, unit: "MINUTES")
+                timeout(time: "${env.TIMEOUT_FOR_UPDATE_TEST_DB_FROM_REPO}", unit: "MINUTES")
             }
 
             steps {
