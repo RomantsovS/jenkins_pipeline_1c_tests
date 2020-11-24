@@ -360,6 +360,15 @@ pipeline {
     post {
         always {
             script {
+                if (currentBuild.result == "ABORTED") {
+                    return
+                }
+                
+                dir ('report/allurereport') {
+                    writeFile file:'environment.properties', text:"Build=${env.BUILD_URL}"
+                }
+                allure includeProperties: false, jdk: '', results: [[path: 'report/allurereport']]
+
                 commonMethods.emailJobStatus ("BUILD STATUS")
             }
         }
