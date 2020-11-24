@@ -270,7 +270,7 @@ def updateDbTask(platform1c, server1c, cluster1c_port, base_name, storage1cPath,
     def connString = "/S${server1c}:${cluster1c_port}\\${base_name}"
     
     loadCfgFrom1CStorage(storage1cPath, storageUser, storagePwd, connString, admin_1c_name, admin_1c_pwd, platform1c)
-    //updateInfobase(connString, admin_1c_name, admin_1c_pwd, platform1c)
+    updateInfobase(connString, admin_1c_name, admin_1c_pwd, platform1c)
 }
 
 // Загружает в базу конфигурацию из 1С хранилища. Базу желательно подключить к хранилищу под загружаемым пользователем,
@@ -306,6 +306,40 @@ def loadCfgFrom1CStorage(storage1cPath, storageUser, storagePwd, connString, adm
          commonMethods.echoAndError("Загрузка конфигурации из 1С хранилища ${storage1cPath} завершилась с ошибкой. Для подробностей смотрите логи.")
     }
 }
+
+// Обновляет базу в режиме конфигуратора. Аналог нажатия кнопки f7
+//
+// Параметры:
+//
+//  connString - строка соединения, например /Sdevadapter\template_adapter_adapter
+//  platform - полный номер платформы 1с
+//  admin1cUser - администратор базы
+//  admin1cPassword - пароль администратора базы
+//
+def updateInfobase(connString, admin1cUser, admin1cPassword, platform) {
+
+    utils = new Utils()
+    admin1cUserLine = "";
+    if (!admin1cUser.isEmpty()) {
+        admin1cUserLine = "--db-user ${admin1cUser}"
+    }
+    admin1cPassLine = "";
+    if (!admin1cPassword.isEmpty()) {
+        admin1cPassLine = "--db-pwd ${admin1cPassword}"
+    }
+    platformLine = ""
+    if (platform != null && !platform.isEmpty()) {
+        platformLine = "--v8version ${platform}"
+    }
+
+    def command = "runner updatedb --ibconnection ${connString} ${admin1cUserLine} ${admin1cPassLine} ${platformLine}"
+    echo "cmd status code $returnCode"
+
+    if (returnCode != 0) {
+         commonMethods.echoAndError"Обновление конфигурации БД ${connString} в режиме конфигуратора завершилось с ошибкой. Для дополнительной информации смотрите логи")
+    }
+}
+
 
 def createFileDatabase(pathTo1CThickClient, databaseDirectory, deleteIfExits) {
     
