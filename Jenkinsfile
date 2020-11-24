@@ -1,6 +1,5 @@
 pipeline {
     parameters {
-        string(name: 'timeout_for_all_scenario', defaultValue: '120', description: 'Таймаут на весь сценарий в минутах')
         booleanParam(defaultValue: env.delete_test_db_stage == null ? true : env.delete_test_db_stage, description: 'Выполнять ли шаг удаления тестовой базы. По умолчанию: true', name: 'delete_test_db_stage')
         booleanParam(defaultValue: env.sql_backup_template == null ? true : env.sql_backup_template, description: 'Выполнять ли шаг выгрузки бекапа эталонной базы. По умолчанию: true', name: 'sql_backup_template')
         booleanParam(defaultValue: env.sql_restore_template == null ? true : env.sql_restore_template, description: 'Выполнять ли шаг загрузки тестовой базы из бекапа. По умолчанию: true', name: 'sql_restore_template')
@@ -16,7 +15,7 @@ pipeline {
     options { 
         buildDiscarder(logRotator(numToKeepStr: '7'))
         timestamps()
-        timeout(time: timeout_for_all_scenario.toInteger(), unit: 'MINUTES')
+        timeout(time: 8, unit: 'HOURS')
     }
     
     stages {
