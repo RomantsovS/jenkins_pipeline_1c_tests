@@ -124,7 +124,7 @@ pipeline {
         }
 
         stage("Sql backup template DB") {
-            when { expression {params.sql_backup_template != 'No'} }
+            when { expression {params.sql_backup_template} }
 
             steps {
                 script {                    
@@ -153,7 +153,7 @@ pipeline {
         }
 
         stage("Sql restore template DB") {
-            when { expression {params.sql_restore_template != 'No'} }
+            when { expression {params.sql_restore_template} }
 
             steps {
                 script {                    
@@ -182,7 +182,7 @@ pipeline {
         }
 
         stage("Create test DB") {
-            when { expression {params.create_test_db != 'No'} }
+            when { expression {params.create_test_db} }
 
             steps {
                 script {                    
@@ -212,7 +212,7 @@ pipeline {
         }
 
         stage("Update test DB from repo") {
-            when { expression {params.update_test_db_from_repo != 'No'} }
+            when { expression {params.update_test_db_from_repo} }
 
             steps {
                 script {                    
