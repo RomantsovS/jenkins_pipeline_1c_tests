@@ -332,6 +332,7 @@ def updateInfobase(connString, admin1cUser, admin1cPassword, platform) {
     }
 
     def command = "runner updatedb --ibconnection ${connString} ${admin1cUserLine} ${admin1cPassLine} ${platformLine}"
+    returnCode = commonMethods.cmdReturnStatusCode(command)
     echo "cmd status code $returnCode"
 
     if (returnCode != 0) {
