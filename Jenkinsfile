@@ -251,7 +251,7 @@ pipeline {
                     Exception caughtException = null
 
                     try { timeout(time: env.TIMEOUT_FOR_COMLILE_TESTS_STAGE.toInteger(), unit: 'MINUTES') {
-                        def cmd_properties = "СобратьСценарии;JsonParams=./params.json"
+                        def cmd_properties = "СобратьСценарии;JsonParams=./Repo/${env.env.PROPERTIES_CATALOG}/params.json"
 
                         def ib_connection = "/S${env.SERVER_1C}:${env.CLUSTER_1C_PORT}\\${env.TEST_BASE_NAME}"
                         
