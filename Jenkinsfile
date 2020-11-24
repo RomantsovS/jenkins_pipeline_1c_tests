@@ -302,7 +302,7 @@ pipeline {
             when { expression {params.run_tests_stage} }
             steps {
                 script {
-                    def files = findFiles(glob: './Repo/tests/features/*/*.json')
+                    def files = findFiles(glob: 'features/*/*.json')
                     
                     for(file in files) {
                         Exception caughtException = null
