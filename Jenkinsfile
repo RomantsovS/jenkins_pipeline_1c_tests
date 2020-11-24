@@ -1,18 +1,22 @@
 pipeline {
     parameters {
-        choice(name: 'delete_test_db', choices: ['Yes', 'No'], description: 'Условие удаления тестовой базы. По умолчанию Истина')
-        choice(name: 'sql_backup_template', choices: ['Yes', 'No'], description: 'Условие выгрузки sql бекапа эталонной базы. По умолчанию Истина')
-        choice(name: 'sql_restore_template', choices: ['Yes', 'No'], description: 'Условие восстановления тестовой базы из sql бекапа эталонной базы. По умолчанию Истина')
-        choice(name: 'create_test_db', choices: ['Yes', 'No'], description: 'Условие создания тестовой базы. По умолчанию Истина')
-        choice(name: 'update_test_db_from_repo', choices: ['Yes', 'No'], description: 'Условие обновления тестовой базы из хранилища. По умолчанию Истина')
+        string(name: 'timeout_for_all_scenario', defaultValue: '120', description: 'Таймаут на весь сценарий в минутах')
+        booleanParam(defaultValue: env.delete_test_db_stage == null ? true : env.delete_test_db_stage, description: 'Выполнять ли шаг удаления тестовой базы. По умолчанию: true', name: 'delete_test_db_stage')
+        booleanParam(defaultValue: env.sql_backup_template == null ? true : env.sql_backup_template, description: 'Выполнять ли шаг выгрузки бекапа эталонной базы. По умолчанию: true', name: 'sql_backup_template')
+        booleanParam(defaultValue: env.sql_restore_template == null ? true : env.sql_restore_template, description: 'Выполнять ли шаг загрузки тестовой базы из бекапа. По умолчанию: true', name: 'sql_restore_template')
+        booleanParam(defaultValue: env.create_test_db == null ? true : env.create_test_db, description: 'Выполнять ли шаг создания тестовой базы. По умолчанию: true', name: 'create_test_db')
+        booleanParam(defaultValue: env.update_test_db_from_repo == null ? true : env.update_test_db_from_repo, description: 'Выполнять ли шаг обновления конфигурации тестовой базы. По умолчанию: true', name: 'update_test_db_from_repo')
+        string(defaultValue: "${env.jenkinsAgent}", description: 'Нода дженкинса, на которой запускать пайплайн. По умолчанию master', name: 'jenkinsAgent')
     }
 
-    agent { label "dev1c" }
+    agent {
+        label "${(env.jenkinsAgent == null || env.jenkinsAgent == 'null') ? "master" : env.jenkinsAgent}"
+    }
 
     options { 
         buildDiscarder(logRotator(numToKeepStr: '7'))
         timestamps()
-        timeout(time: 120, unit: 'MINUTES')
+        timeout(time: timeout_for_all_scenario.toInteger(), unit: 'MINUTES')
     }
     
     stages {
@@ -21,7 +25,7 @@ pipeline {
                 script {
                     Exception caughtException = null
 
-                    try { timeout(time: 3, unit: 'MINUTES') {
+                    try { timeout(time: 5, unit: 'MINUTES') {
                         load "./SetEnvironmentVars.groovy"   // Загружаем переменные окружения (настойки)
                         commonMethods = load "./lib/CommonMethods.groovy" // Загружаем общий модуль
                         dbManage = load "./lib/DBManage.groovy"
@@ -54,8 +58,41 @@ pipeline {
             }
         }
 
+        stage('Checkout') {
+            steps {
+                script {
+                    Exception caughtException = null
+
+                    try { timeout(time: env.TIMEOUT_FOR_CHECKOUT_STAGE.toInteger(), unit: 'MINUTES') {
+                        dir('Repo') {
+                            checkout([$class: 'GitSCM',
+                            branches: [[name: "*/${env.git_repo_branch}"]],
+                            doGenerateSubmoduleConfigurations: false,
+                            extensions: [[$class: 'CheckoutOption', timeout: 60], [$class: 'CloneOption', depth: 0, noTags: true, reference: '', shallow: false,
+                            timeout: 60]], submoduleCfg: [],
+                            userRemoteConfigs: [[/*credentialsId: gitlab_credentials_Id,*/ url: git_repo_url]]])
+
+                            load "./${PROPERTIES_CATALOG}/SetEnvironmentVars.groovy"
+                        }
+                    }}
+                    catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
+                        if (commonMethods.isTimeoutException(excp)) {
+                            commonMethods.throwTimeoutException("${STAGE_NAME}")
+                        }
+                    }
+                    catch (Throwable excp) {
+                        caughtException = excp
+                    }
+
+                    if (caughtException) {
+                        error caughtException.message
+                    }
+                }
+            }
+        }
+
         stage("Delete test DB") {
-            when { expression {delete_test_db != 'No'} }
+            when { expression {params.delete_test_db} }
 
             steps {
                 script {
@@ -85,7 +122,7 @@ pipeline {
         }
 
         stage("Sql backup template DB") {
-            when { expression {sql_backup_template != 'No'} }
+            when { expression {params.sql_backup_template != 'No'} }
 
             steps {
                 script {                    
@@ -114,7 +151,7 @@ pipeline {
         }
 
         stage("Sql restore template DB") {
-            when { expression {sql_restore_template != 'No'} }
+            when { expression {params.sql_restore_template != 'No'} }
 
             steps {
                 script {                    
@@ -143,7 +180,7 @@ pipeline {
         }
 
         stage("Create test DB") {
-            when { expression {create_test_db != 'No'} }
+            when { expression {params.create_test_db != 'No'} }
 
             steps {
                 script {                    
@@ -173,7 +210,7 @@ pipeline {
         }
 
         stage("Update test DB from repo") {
-            when { expression {update_test_db_from_repo != 'No'} }
+            when { expression {params.update_test_db_from_repo != 'No'} }
 
             steps {
                 script {                    

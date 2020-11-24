@@ -18,6 +18,8 @@ if (isUnix()) {
     env.RAC_PATH = "\\\\rusklimat.ru\\app\\1Cv8ADM\\8.3.16.1063\\bin\\rac.exe"
 }
 
+env.PROPERTIES_CATALOG = "./tests"
+
 env.SERVER_SQL = "DB01"
 
 env.SERVER_1C = "cv8app12"
@@ -38,6 +40,7 @@ env.ADMIN_1C_NAME = "Administrator"
 env.ADMIN_1C_PWD = ""
 
 env.TIMEOUT_FOR_INIT_STAGE = "3"
+env.TIMEOUT_FOR_CHECKOUT_STAGE = "10"
 env.TIMEOUT_FOR_DELETE_TEST_DB_STAGE = "4"
 env.TIMEOUT_FOR_SQL_BACKUP_TEMPLATE_DB = "5"
 env.TIMEOUT_FOR_SQL_RESTORE_TEMPLATE_DB = "6"
