@@ -253,7 +253,7 @@ pipeline {
                     try { timeout(time: env.TIMEOUT_FOR_COMLILE_TESTS_STAGE.toInteger(), unit: 'MINUTES') {
                         def cmd_properties = "СобратьСценарии;JsonParams=./params.json"
 
-                        def ib_connection = "/S${env.TEST_BASE_SERVER1C}\\${env.TEST_BASE_NAME}"
+                        def ib_connection = "/S${env.SERVER_1C}\\${env.TEST_BASE_NAME}"
                         
                         base_pwd_line = ""
                         if(env.TEST_USER_PWD != null && !env.TEST_USER_PWD.isEmpty()) {
