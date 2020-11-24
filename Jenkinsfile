@@ -1,6 +1,7 @@
 pipeline {
     parameters {
-        booleanParam(defaultValue: env.checkout_stage == null ? true : env.checkout_stage, description: 'Выполнять ли шаг удаления тестовой базы. По умолчанию: true', name: 'checkout_stage')
+        string(defaultValue: "${env.git_repo_url}", description: '* URL к гит-репозиторию, который необходимо проверить.', name: 'git_repo_url')
+        booleanParam(defaultValue: env.checkout_stage == null ? true : env.checkout_stage, description: 'Выполнять ли шаг получения репозитория. По умолчанию: true', name: 'checkout_stage')
         booleanParam(defaultValue: env.delete_test_db_stage == null ? true : env.delete_test_db_stage, description: 'Выполнять ли шаг удаления тестовой базы. По умолчанию: true', name: 'delete_test_db_stage')
         booleanParam(defaultValue: env.sql_backup_template == null ? true : env.sql_backup_template, description: 'Выполнять ли шаг выгрузки бекапа эталонной базы. По умолчанию: true', name: 'sql_backup_template')
         booleanParam(defaultValue: env.sql_restore_template == null ? true : env.sql_restore_template, description: 'Выполнять ли шаг загрузки тестовой базы из бекапа. По умолчанию: true', name: 'sql_restore_template')
