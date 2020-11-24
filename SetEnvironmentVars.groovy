@@ -18,6 +18,8 @@ if (isUnix()) {
     env.RAC_PATH = "\\\\rusklimat.ru\\app\\1Cv8ADM\\8.3.16.1063\\bin\\rac.exe"
 }
 
+env.git_repo_branch = "master"
+
 env.PROPERTIES_CATALOG = "./tests"
 
 env.SERVER_SQL = "DB01"
