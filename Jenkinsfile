@@ -7,6 +7,8 @@ pipeline {
         booleanParam(defaultValue: env.sql_restore_template_stage == null ? true : env.sql_restore_template_stage, description: 'Выполнять ли шаг загрузки тестовой базы из бекапа. По умолчанию: true', name: 'sql_restore_template_stage')
         booleanParam(defaultValue: env.create_test_db_stage == null ? true : env.create_test_db_stage, description: 'Выполнять ли шаг создания тестовой базы. По умолчанию: true', name: 'create_test_db_stage')
         booleanParam(defaultValue: env.update_test_db_from_repo_stage == null ? true : env.update_test_db_from_repo_stage, description: 'Выполнять ли шаг обновления конфигурации тестовой базы. По умолчанию: true', name: 'update_test_db_from_repo_stage')
+        booleanParam(defaultValue: env.compile_tests_stage == null ? true : env.compile_tests_stage, description: 'Выполнять ли шаг компиляции тестов. По умолчанию: true', name: 'compile_tests_stage')
+        booleanParam(defaultValue: env.run_tests_stage == null ? true : env.run_tests_stage, description: 'Выполнять ли шаг выполнения тестов. По умолчанию: true', name: 'run_tests_stage')
         string(defaultValue: "${env.jenkinsAgent}", description: 'Нода дженкинса, на которой запускать пайплайн. По умолчанию master', name: 'jenkinsAgent')
     }
 
@@ -72,8 +74,8 @@ pipeline {
 
                             load "./${PROPERTIES_CATALOG}/SetEnvironmentVars.groovy"
 
-                            backupFolder = "${env.SQL_BACKUP_PATH}/${env.DB_NAME_TEMPLATE}"
-                            backupPath = backupFolder + "/temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}.bak"
+                            backupFolder = "${env.SQL_BACKUP_PATH}/${env.TEST_BASE_NAME_TEMPLATE}"
+                            backupPath = backupFolder + "/temp_${env.TEST_BASE_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}.bak"
 
                             dbManage.delete_backup_files(env.SERVER_SQL, backupFolder, "", "")
                         }
@@ -103,7 +105,7 @@ pipeline {
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
                         try { timeout(time: env.TIMEOUT_FOR_DELETE_TEST_DB_STAGE.toInteger(), unit: 'MINUTES') { 
-                            dbManage.dropDb(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_NAME_1C, env.SERVER_SQL, env.DB_NAME, env.ADMIN_1C_NAME, 
+                            dbManage.dropDb(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_NAME_1C, env.SERVER_SQL, env.TEST_BASE_NAME, env.ADMIN_1C_NAME, 
                             env.ADMIN_1C_PWD, env.RAC_PATH, env.RAC_PORT, env.VERBOSE)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
@@ -132,8 +134,8 @@ pipeline {
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: env.TIMEOUT_FOR_SQL_BACKUP_TEMPLATE_DB.toInteger(), unit: 'MINUTES') {
-                            dbManage.backupTask(env.SERVER_SQL, env.DB_NAME_TEMPLATE, backupPath, "", "")
+                        try { timeout(time: env.TIMEOUT_FOR_SQL_BACKUP_TEMPLATE_DB_STAGE.toInteger(), unit: 'MINUTES') {
+                            dbManage.backupTask(env.SERVER_SQL, env.TEST_BASE_NAME_TEMPLATE, backupPath, "", "")
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             if (commonMethods.isTimeoutException(excp)) {
@@ -161,8 +163,8 @@ pipeline {
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: env.TIMEOUT_FOR_SQL_RESTORE_TEMPLATE_DB.toInteger(), unit: 'MINUTES') { 
-                            dbManage.restoreTask(env.SERVER_SQL, env.DB_NAME, backupPath, "", "")
+                        try { timeout(time: env.TIMEOUT_FOR_SQL_RESTORE_TEMPLATE_DB_STAGE.toInteger(), unit: 'MINUTES') { 
+                            dbManage.restoreTask(env.SERVER_SQL, env.TEST_BASE_NAME, backupPath, "", "")
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             if (commonMethods.isTimeoutException(excp)) {
@@ -190,8 +192,8 @@ pipeline {
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: env.TIMEOUT_FOR_CREATE_TEST_DB.toInteger(), unit: 'MINUTES') { 
-                            dbManage.createDB(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.SERVER_SQL, env.DB_NAME,
+                        try { timeout(time: env.TIMEOUT_FOR_CREATE_TEST_DB_STAGE.toInteger(), unit: 'MINUTES') { 
+                            dbManage.createDB(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.SERVER_SQL, env.TEST_BASE_NAME,
                             env.CLUSTER_1C_PORT, null, false, env.RAC_PATH, env.RAC_PORT, env.CLUSTER_NAME_1C, env.VERBOSE)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
@@ -220,8 +222,8 @@ pipeline {
                     Exception caughtException = null
 
                     //catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') { 
-                        try { timeout(time: env.TIMEOUT_FOR_UPDATE_TEST_DB_FROM_REPO.toInteger(), unit: 'MINUTES') { 
-                            dbManage.updateDbTask(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_1C_PORT, env.DB_NAME,
+                        try { timeout(time: env.TIMEOUT_FOR_UPDATE_TEST_DB_FROM_REPO_STAGE.toInteger(), unit: 'MINUTES') { 
+                            dbManage.updateDbTask(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_1C_PORT, env.TEST_BASE_NAME,
                             env.STORAGE_PATH, env.STORAGE_USR, env.STORAGE_PWD, env.ADMIN_1C_NAME, env.ADMIN_1C_PWD)
                         }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
@@ -234,6 +236,60 @@ pipeline {
                             caughtException = excp
                         }
                     //}
+
+                    if (caughtException) {
+                        error caughtException.message
+                    }
+                }
+            }
+        }
+
+        stage('compile tests') {
+            when { expression {params.compile_tests_stage} }
+            steps {
+                script {
+                    Exception caughtException = null
+
+                    try { timeout(time: env.TIMEOUT_FOR_COMLILE_TESTS_STAGE.toInteger(), unit: 'MINUTES') {
+                        def cmd_properties = "СобратьСценарии;JsonParams=./params.json"
+
+                        def ib_connection = "/S${env.TEST_BASE_SERVER1C}\\${env.TEST_BASE_NAME}"
+                        
+                        base_pwd_line = ""
+                        if(env.TEST_USER_PWD != null && !env.TEST_USER_PWD.isEmpty()) {
+                            base_pwd_line = "--db-pwd ${env.TEST_USER_PWD}"
+                        }
+
+                        if(env.USE_VANESSA_RUNNER == "true") {
+                            additional_1c_params_line = ""
+                            if(env.ADDITIONAL_1C_PARAMS != null && !env.ADDITIONAL_1C_PARAMS.isEmpty()) {
+                                additional_1c_params_line = "--additional \"${env.ADDITIONAL_1C_PARAMS}\""
+                            }
+
+                            command = "runner run --ibconnection ${ib_connection} --db-user ${env.TEST_USER} ${base_pwd_line} ${additional_1c_params_line}"
+                            command = command + " --command \"${cmd_properties}\" --execute \"./СборкаТекстовСценариев.epf\""
+                        }
+                        else {
+                            command = "${env.PATH_TO_1C} ${ib_connection} /Execute ./СборкаТекстовСценариев.epf"
+                            command = command + " /C${cmd_properties}"
+                        }
+
+                        returnCode = commonMethods.cmdReturnStatusCode(command)
+    
+                        echo "cmd status code $returnCode"
+    
+                        if (returnCode != 0) {
+                            commonMethods.echoAndError("Error running compile SPPR tests ${TEST_BASE_NAME} at ${TEST_BASE_SERVER1C}")
+                        }
+                    }}
+                    catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
+                        if (commonMethods.isTimeoutException(excp)) {
+                            commonMethods.throwTimeoutException("${STAGE_NAME}")
+                        }
+                    }
+                    catch (Throwable excp) {
+                        caughtException = excp
+                    }
 
                     if (caughtException) {
                         error caughtException.message
