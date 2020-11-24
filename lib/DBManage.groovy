@@ -296,8 +296,8 @@ def loadCfgFrom1CStorage(storage1cPath, storageUser, storagePwd, connString, adm
         admin_1c_pwd_line = "--db-pwd ${admin_1c_pwd}"
     }
 
-    def command = "vrunner loadrepo --storage-name ${storage1cPath} --storage-user ${storageUser} ${storagePwdLine} --ibconnection ${connString} --db-user ${admin_1c_name}"
-    command - command + " ${admin_1c_pwd_line} ${platformLine}"
+    def command = "vrunner loadrepo --storage-name ${storage1cPath} --storage-user ${storageUser} ${storagePwdLine} --ibconnection ${connString}"
+    command - command + " --db-user ${admin_1c_name} ${admin_1c_pwd_line} ${platformLine}"
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
