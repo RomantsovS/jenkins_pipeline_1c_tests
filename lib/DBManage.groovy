@@ -336,7 +336,7 @@ def updateInfobase(connString, admin1cUser, admin1cPassword, platform) {
     echo "cmd status code $returnCode"
 
     if (returnCode != 0) {
-         commonMethods.echoAndError("Обновление конфигурации БД ${connString} в режиме конфигуратора завершилось с ошибкой. Для дополнительной информации смотрите логи")
+         commonMethods.echoAndError("Обновление конфигурации БД ${connString} в режиме конфигуратора завершилось с ошибкой")
     }
 }
 
