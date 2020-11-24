@@ -297,6 +297,64 @@ pipeline {
                 }
             }
         }
+
+        stage('run tests') {
+            when { expression {params.run_tests_stage} }
+            steps {
+                script {
+                    def files = findFiles(glob: './Repo/tests/features/*/*.json')
+                    
+                    for(file in files) {
+                        Exception caughtException = null
+
+                        try { timeout(time: env.TIMEOUT_FOR_ONE_FEATURE_STAGE.toInteger(), unit: 'MINUTES') {
+                            def cmd_properties = "StartFeaturePlayer;workspaceRoot=${env.WORKSPACE};VBParams=${file.path}"
+
+                            def ib_connection = "/S${env.SERVER_1C}:${env.CLUSTER_1C_PORT}\\${env.TEST_BASE_NAME}"
+                        
+                            base_pwd_line = ""
+                            if(env.TEST_USER_PWD != null && !env.TEST_USER_PWD.isEmpty()) {
+                                base_pwd_line = "--db-pwd ${env.TEST_USER_PWD}"
+                            }
+
+                            if(env.USE_VANESSA_RUNNER == "true") {
+                                additional_1c_params_line = ""
+                                if(env.ADDITIONAL_1C_PARAMS != null && !env.ADDITIONAL_1C_PARAMS.isEmpty()) {
+                                    additional_1c_params_line = "--additional \"${env.ADDITIONAL_1C_PARAMS}\""
+                                }
+
+                                command = "runner run --ibconnection ${ib_connection} --db-user ${env.TEST_USER} ${base_pwd_line} ${additional_1c_params_line}"
+                                command = command + " --command \"${cmd_properties}\" --execute \"./СборкаТекстовСценариев.epf\""
+                            }
+                            else {
+                                command = "${env.PATH_TO_1C} ${ib_connection} /TestManager /Execute ${env.PATH_TO_VANESSA_AUTOMATION}"
+                                command = command + " /C${cmd_properties}"
+                            }
+
+                            returnCode = commonMethods.cmdReturnStatusCode(command)
+    
+                            echo "cmd status code $returnCode"
+    
+                            if (returnCode != 0) {
+                                commonMethods.echoAndError("Error running test ${file.path} ${TEST_BASE_NAME} at ${TEST_BASE_SERVER1C}")
+                            }
+                        }}
+                        catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
+                            if (commonMethods.isTimeoutException(excp)) {
+                                commonMethods.throwTimeoutException("${STAGE_NAME}")
+                            }
+                        }
+                        catch (Throwable excp) {
+                            caughtException = excp
+                        }
+
+                        if (caughtException) {
+                            error caughtException.message
+                        }
+                    }
+                }
+            }
+        }
     }
 
     post {
