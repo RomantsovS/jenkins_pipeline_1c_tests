@@ -318,7 +318,6 @@ def loadCfgFrom1CStorage(storage1cPath, storageUser, storagePwd, connString, adm
 //
 def updateInfobase(connString, admin1cUser, admin1cPassword, platform) {
 
-    utils = new Utils()
     admin1cUserLine = "";
     if (!admin1cUser.isEmpty()) {
         admin1cUserLine = "--db-user ${admin1cUser}"
