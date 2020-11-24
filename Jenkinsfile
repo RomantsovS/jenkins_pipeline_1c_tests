@@ -3,10 +3,10 @@ pipeline {
         string(defaultValue: "${env.git_repo_url}", description: '* URL к гит-репозиторию, который необходимо проверить.', name: 'git_repo_url')
         booleanParam(defaultValue: env.checkout_stage == null ? true : env.checkout_stage, description: 'Выполнять ли шаг получения репозитория. По умолчанию: true', name: 'checkout_stage')
         booleanParam(defaultValue: env.delete_test_db_stage == null ? true : env.delete_test_db_stage, description: 'Выполнять ли шаг удаления тестовой базы. По умолчанию: true', name: 'delete_test_db_stage')
-        booleanParam(defaultValue: env.sql_backup_template == null ? true : env.sql_backup_template, description: 'Выполнять ли шаг выгрузки бекапа эталонной базы. По умолчанию: true', name: 'sql_backup_template')
-        booleanParam(defaultValue: env.sql_restore_template == null ? true : env.sql_restore_template, description: 'Выполнять ли шаг загрузки тестовой базы из бекапа. По умолчанию: true', name: 'sql_restore_template')
-        booleanParam(defaultValue: env.create_test_db == null ? true : env.create_test_db, description: 'Выполнять ли шаг создания тестовой базы. По умолчанию: true', name: 'create_test_db')
-        booleanParam(defaultValue: env.update_test_db_from_repo == null ? true : env.update_test_db_from_repo, description: 'Выполнять ли шаг обновления конфигурации тестовой базы. По умолчанию: true', name: 'update_test_db_from_repo')
+        booleanParam(defaultValue: env.sql_backup_template_stage == null ? true : env.sql_backup_template_stage, description: 'Выполнять ли шаг выгрузки бекапа эталонной базы. По умолчанию: true', name: 'sql_backup_template_stage')
+        booleanParam(defaultValue: env.sql_restore_template_stage == null ? true : env.sql_restore_template_stage, description: 'Выполнять ли шаг загрузки тестовой базы из бекапа. По умолчанию: true', name: 'sql_restore_template_stage')
+        booleanParam(defaultValue: env.create_test_db_stage == null ? true : env.create_test_db_stage, description: 'Выполнять ли шаг создания тестовой базы. По умолчанию: true', name: 'create_test_db_stage')
+        booleanParam(defaultValue: env.update_test_db_from_repo_stage == null ? true : env.update_test_db_from_repo_stage, description: 'Выполнять ли шаг обновления конфигурации тестовой базы. По умолчанию: true', name: 'update_test_db_from_repo_stage')
         string(defaultValue: "${env.jenkinsAgent}", description: 'Нода дженкинса, на которой запускать пайплайн. По умолчанию master', name: 'jenkinsAgent')
     }
 
@@ -55,7 +55,7 @@ pipeline {
         }
 
         stage('Checkout') {
-            when { expression {params.checkout_db} }
+            when { expression {params.checkout_stage} }
 
             steps {
                 script {
@@ -95,7 +95,7 @@ pipeline {
         }
 
         stage("Delete test DB") {
-            when { expression {params.delete_test_db} }
+            when { expression {params.delete_test_db_stage} }
 
             steps {
                 script {
@@ -125,7 +125,7 @@ pipeline {
         }
 
         stage("Sql backup template DB") {
-            when { expression {params.sql_backup_template} }
+            when { expression {params.sql_backup_template_stage} }
 
             steps {
                 script {                    
@@ -154,7 +154,7 @@ pipeline {
         }
 
         stage("Sql restore template DB") {
-            when { expression {params.sql_restore_template} }
+            when { expression {params.sql_restore_template_stage} }
 
             steps {
                 script {                    
@@ -183,7 +183,7 @@ pipeline {
         }
 
         stage("Create test DB") {
-            when { expression {params.create_test_db} }
+            when { expression {params.create_test_db_stage} }
 
             steps {
                 script {                    
@@ -213,7 +213,7 @@ pipeline {
         }
 
         stage("Update test DB from repo") {
-            when { expression {params.update_test_db_from_repo} }
+            when { expression {params.update_test_db_from_repo_stage} }
 
             steps {
                 script {                    
