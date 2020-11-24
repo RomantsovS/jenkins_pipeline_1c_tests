@@ -35,11 +35,6 @@ pipeline {
                         dir ('build') {
                             writeFile file:'dummy', text:''
                         }
-
-                        backupFolder = "${env.SQL_BACKUP_PATH}/${env.DB_NAME_TEMPLATE}"
-                        backupPath = backupFolder + "/temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}.bak"
-
-                        dbManage.delete_backup_files(env.SERVER_SQL, backupFolder, "", "")
                     }}
                         catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
                             if (commonMethods.isTimeoutException(excp)) {
@@ -75,6 +70,11 @@ pipeline {
                             userRemoteConfigs: [[/*credentialsId: gitlab_credentials_Id,*/ url: git_repo_url]]])
 
                             load "./${PROPERTIES_CATALOG}/SetEnvironmentVars.groovy"
+
+                            backupFolder = "${env.SQL_BACKUP_PATH}/${env.DB_NAME_TEMPLATE}"
+                            backupPath = backupFolder + "/temp_${env.DB_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}.bak"
+
+                            dbManage.delete_backup_files(env.SERVER_SQL, backupFolder, "", "")
                         }
                     }}
                     catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException excp) {
