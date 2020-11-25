@@ -35,8 +35,8 @@ env.CLUSTER_NAME_1C = "\"ERP TEST ENV\""
 
 env.TEST_BASE_NAME = "ERP_TEST_FOR_CI"
 env.TEST_BASE_NAME_TEMPLATE = env.TEST_BASE_NAME + "_Template"
-env.TEST_USER = "auto"
-env.TEST_USER_PWD = "6556883"
+env.ADMIN_1C_NAME = "CI_Automation"
+env.ADMIN_1C_PWD = ""
 env.ADDITIONAL_1C_PARAMS = "/UseHwLisenses+"
 env.USE_VANESSA_RUNNER = "false"
 
@@ -45,9 +45,6 @@ env.SQL_BACKUP_PATH = "D:\\SQLBACKUP"
 env.STORAGE_PATH = "tcp://DB01/ERP"
 env.STORAGE_USR = "CI_Automation"
 env.STORAGE_PWD = ""
-
-env.ADMIN_1C_NAME = "Administrator"
-env.ADMIN_1C_PWD = ""
 
 env.PATH_TO_1C = "\\\\rusklimat.ru\\app\\1Cv8ADM\\8.3.12.1685_CR\\bin\\1cv8c.exe" //если env.USE_VANESSA_RUNNER = "false"
 env.PATH_TO_VANESSA_AUTOMATION = "\\\\dev1c\\vanessa-automation\\vanessa-automation.epf"

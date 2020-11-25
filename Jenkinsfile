@@ -256,8 +256,8 @@ pipeline {
                         def ib_connection = "/S${env.SERVER_1C}:${env.CLUSTER_1C_PORT}\\${env.TEST_BASE_NAME}"
                         
                         base_pwd_line = ""
-                        if(env.TEST_USER_PWD != null && !env.TEST_USER_PWD.isEmpty()) {
-                            base_pwd_line = "--db-pwd ${env.TEST_USER_PWD}"
+                        if(env.ADMIN_1C_PWD != null && !env.ADMIN_1C_PWD.isEmpty()) {
+                            base_pwd_line = "--db-pwd ${env.ADMIN_1C_PWD}"
                         }
 
                         if(env.USE_VANESSA_RUNNER == "true") {
@@ -266,7 +266,7 @@ pipeline {
                                 additional_1c_params_line = "--additional \"${env.ADDITIONAL_1C_PARAMS}\""
                             }
 
-                            command = "runner run --ibconnection ${ib_connection} --db-user ${env.TEST_USER} ${base_pwd_line} ${additional_1c_params_line}"
+                            command = "runner run --ibconnection ${ib_connection} --db-user ${env.ADMIN_1C} ${base_pwd_line} ${additional_1c_params_line}"
                             command = command + " --command \"${cmd_properties}\" --execute \"./СборкаТекстовСценариев.epf\""
                         }
                         else {
@@ -313,8 +313,8 @@ pipeline {
                             def ib_connection = "/S${env.SERVER_1C}:${env.CLUSTER_1C_PORT}\\${env.TEST_BASE_NAME}"
                         
                             base_pwd_line = ""
-                            if(env.TEST_USER_PWD != null && !env.TEST_USER_PWD.isEmpty()) {
-                                base_pwd_line = "--db-pwd ${env.TEST_USER_PWD}"
+                            if(env.ADMIN_1C_PWD != null && !env.ADMIN_1C_PWD.isEmpty()) {
+                                base_pwd_line = "--db-pwd ${env.ADMIN_1C_PWD}"
                             }
 
                             if(env.USE_VANESSA_RUNNER == "true") {
@@ -323,7 +323,7 @@ pipeline {
                                     additional_1c_params_line = "--additional \"${env.ADDITIONAL_1C_PARAMS}\""
                                 }
 
-                                command = "runner run --ibconnection ${ib_connection} --db-user ${env.TEST_USER} ${base_pwd_line} ${additional_1c_params_line}"
+                                command = "runner run --ibconnection ${ib_connection} --db-user ${env.ADMIN_1C} ${base_pwd_line} ${additional_1c_params_line}"
                                 command = command + " --command \"${cmd_properties}\" --execute \"./СборкаТекстовСценариев.epf\""
                             }
                             else {
