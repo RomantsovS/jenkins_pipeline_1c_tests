@@ -256,6 +256,8 @@ pipeline {
                         }
                         allure includeProperties: false, jdk: '', results: [[path: 'report/allurereport']]
                     }
+                    catch (Throwable excp) {
+                    }
                 }
 
                 commonMethods.emailJobStatus("BUILD STATUS")
