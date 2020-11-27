@@ -200,7 +200,7 @@ pipeline {
                 script {
                     def files = findFiles(glob: 'features/*/*.json')
 
-                    if(files.isEmpty()) {
+                    if(files.size() == 0) {
                         error "finded 0 feature files"
                     }
 
