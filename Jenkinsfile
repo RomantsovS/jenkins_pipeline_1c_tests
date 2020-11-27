@@ -199,7 +199,11 @@ pipeline {
             steps {
                 script {
                     def files = findFiles(glob: 'features/*/*.json')
-                    
+
+                    if(files.isEmpty()) {
+                        error "finded 0 feature files"
+                    }
+
                     for(file in files) {
                         catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
                             Exception caughtException = null
