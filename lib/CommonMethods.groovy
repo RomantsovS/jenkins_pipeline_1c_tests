@@ -166,7 +166,7 @@ def emailJobStatus(header) {
 
     emailext (
         from: "robot@rusklimat.ru",
-        subject: "${header} ${currentBuild.result}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+        subject: "${currentBuild.result}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' ${header}",
         body: """<p>${currentBuild.result} BUILD STATUS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
             <p>Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>"</p>""",
         recipientProviders: [[$class: 'DevelopersRecipientProvider']],
