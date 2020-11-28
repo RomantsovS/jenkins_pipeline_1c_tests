@@ -59,11 +59,6 @@ pipeline {
                             userRemoteConfigs: [[/*credentialsId: gitlab_credentials_Id,*/ url: git_repo_url]]])
 
                             load "./${PROPERTIES_CATALOG}/SetEnvironmentVars.groovy"
-
-                            backupFolder = "${env.SQL_BACKUP_PATH}/${env.TEST_BASE_NAME_TEMPLATE}"
-                            backupPath = backupFolder + "/temp_${env.TEST_BASE_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}.bak"
-
-                            dbManage.delete_backup_files(env.SERVER_SQL, backupFolder, "", "")
                         }
                     }}
                     catch (Throwable excp) {
@@ -95,6 +90,11 @@ pipeline {
             steps {
                 script {
                     try { timeout(time: env.TIMEOUT_FOR_SQL_BACKUP_TEMPLATE_DB_STAGE.toInteger(), unit: 'MINUTES') {
+                        backupFolder = "${env.SQL_BACKUP_PATH}/${env.TEST_BASE_NAME_TEMPLATE}"
+                        backupPath = backupFolder + "/temp_${env.TEST_BASE_NAME_TEMPLATE}_${commonMethods.currentDateStamp()}.bak"
+
+                        dbManage.delete_backup_files(env.SERVER_SQL, backupFolder, "", "")
+
                         dbManage.backupTask(env.SERVER_SQL, env.TEST_BASE_NAME_TEMPLATE, backupPath, "", "")
                     }}
                     catch (Throwable excp) {
