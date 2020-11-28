@@ -26,7 +26,8 @@ env.TIMEOUT_FOR_INIT_STAGE = "3"
 env.TIMEOUT_FOR_CHECKOUT_STAGE = "60"
 
 //параметры для переопределения в одноименном файле в репозитории проекта в каталоге env.PROPERTIES_CATALOG/
-env.SERVER_SQL = "DB01"
+env.SERVER_SQL = "Sonar"
+env.SQL_BACKUP_PATH = "E:\\SQLBackup"
 
 env.SERVER_1C = "cv8app12"
 env.CLUSTER_1C_PORT = "1741"
@@ -39,8 +40,6 @@ env.ADMIN_1C_NAME = "CI_Automation"
 env.ADMIN_1C_PWD = ""
 env.ADDITIONAL_1C_PARAMS = "/UseHwLisenses+"
 env.USE_VANESSA_RUNNER = "false"
-
-env.SQL_BACKUP_PATH = "D:\\SQLBACKUP"
 
 env.STORAGE_PATH = "tcp://DB01/ERP"
 env.STORAGE_USR = "CI_Automation"
