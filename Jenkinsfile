@@ -176,7 +176,6 @@ pipeline {
                         }
                         else {
                             auth_line = "/N${env.ADMIN_1C}"
-                            auth_line = ""
                             if(env.ADMIN_1C_PWD != null && !env.ADMIN_1C_PWD.isEmpty()) {
                                 auth_line = auth_line + "/P ${env.ADMIN_1C_PWD}"
                             }
@@ -234,7 +233,12 @@ pipeline {
                                     command = command + " --command \"${cmd_properties}\" --execute \"./СборкаТекстовСценариев.epf\""
                                 }
                                 else {
-                                    command = "${env.PATH_TO_1C} ${ib_connection} /TestManager /Execute ${env.PATH_TO_VANESSA_AUTOMATION}"
+                                    auth_line = "/N${env.ADMIN_1C}"
+                                    if(env.ADMIN_1C_PWD != null && !env.ADMIN_1C_PWD.isEmpty()) {
+                                        auth_line = auth_line + "/P ${env.ADMIN_1C_PWD}"
+                                    }
+
+                                    command = "${env.PATH_TO_1C} ${ib_connection} ${auth_line} /TestManager /Execute ${env.PATH_TO_VANESSA_AUTOMATION}"
                                     command = command + " /C${cmd_properties}"
                                 }
 
