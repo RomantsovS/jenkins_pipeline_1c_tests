@@ -181,7 +181,7 @@ pipeline {
                                 auth_line = auth_line + "/P ${env.ADMIN_1C_PWD}"
                             }
 
-                            command = "${env.PATH_TO_1C} ${ib_connection} ${env.auth_line} /Execute ./СборкаТекстовСценариев.epf"
+                            command = "${env.PATH_TO_1C} ${ib_connection} ${auth_line} /Execute ./СборкаТекстовСценариев.epf"
                             command = command + " /C${cmd_properties}"
                         }
 
