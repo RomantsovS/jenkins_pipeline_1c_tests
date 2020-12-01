@@ -175,7 +175,7 @@ pipeline {
                             command = command + " --command \"${cmd_properties}\" --execute \"./СборкаТекстовСценариев.epf\""
                         }
                         else {
-                            auth_line = "/N${env.ADMIN_1C}"
+                            def auth_line = "/N${env.ADMIN_1C}"
                             if(env.ADMIN_1C_PWD != null && !env.ADMIN_1C_PWD.isEmpty()) {
                                 auth_line = auth_line + "/P ${env.ADMIN_1C_PWD}"
                             }
@@ -233,7 +233,7 @@ pipeline {
                                     command = command + " --command \"${cmd_properties}\" --execute \"./СборкаТекстовСценариев.epf\""
                                 }
                                 else {
-                                    auth_line = "/N${env.ADMIN_1C}"
+                                    def auth_line = "/N${env.ADMIN_1C}"
                                     if(env.ADMIN_1C_PWD != null && !env.ADMIN_1C_PWD.isEmpty()) {
                                         auth_line = auth_line + "/P ${env.ADMIN_1C_PWD}"
                                     }
