@@ -210,7 +210,7 @@ pipeline {
                     }
 
                     for(file in files) {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'ABORTED') {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                             Exception caughtException = null
                         
                             try { timeout(time: env.TIMEOUT_FOR_ONE_FEATURE_STAGE.toInteger(), unit: 'MINUTES') {
@@ -247,7 +247,7 @@ pipeline {
                                 echo "cmd status code $returnCode"
     
                                 if (returnCode != 0) {
-                                commonMethods.echoAndError("Error running test ${file.path} ${TEST_BASE_NAME} at ${TEST_BASE_SERVER1C}")
+                                    commonMethods.echoAndError("Error running test ${file.path} ${TEST_BASE_NAME} at ${TEST_BASE_SERVER1C}")
                                 }
                             }}
                             catch (Throwable excp) {
