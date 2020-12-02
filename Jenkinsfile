@@ -224,13 +224,13 @@ pipeline {
                                 }
 
                                 if(env.USE_VANESSA_RUNNER == "true") {
-                                    additional_1c_params_line = ""
+                                    additional_1c_params_line = "/TestManager"
                                     if(env.ADDITIONAL_1C_PARAMS != null && !env.ADDITIONAL_1C_PARAMS.isEmpty()) {
-                                        additional_1c_params_line = "--additional \"${env.ADDITIONAL_1C_PARAMS}\""
+                                        additional_1c_params_line = additional_1c_params_line + " --additional \"${env.ADDITIONAL_1C_PARAMS}\""
                                     }
 
                                     command = "runner run --ibconnection ${ib_connection} --db-user ${env.ADMIN_1C_NAME} ${base_pwd_line} ${additional_1c_params_line}"
-                                    command = command + " --command \"${cmd_properties}\" --execute \"./СборкаТекстовСценариев.epf\""
+                                    command = command + " --command \"${cmd_properties}\" --execute \"${env.PATH_TO_VANESSA_AUTOMATION}\""
                                 }
                                 else {
                                     def auth_line = "/N${env.ADMIN_1C_NAME}"
