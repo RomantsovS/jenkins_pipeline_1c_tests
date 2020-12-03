@@ -32,6 +32,12 @@ pipeline {
                         dbManage = load "./lib/DBManage.groovy"
                         sqlUtils = load "./lib/SqlUtils.groovy"
 
+                        echo "searching file: ${env.WORKSPACE}/compile_log.txt"
+                        def files = findFiles(glob: 'features/*/*.json')
+                        for(file in files) {
+                            echo "file: ${file.path}"
+                        }
+
                         if (fileExists("${env.WORKSPACE}/compile_log.txt")) {
                             new File("${env.WORKSPACE}/compile_log.txt").delete()
                         }
