@@ -33,7 +33,7 @@ pipeline {
                         sqlUtils = load "./lib/SqlUtils.groovy"
 
                         echo "searching file: ${env.WORKSPACE}/compile_log.txt"
-                        def files = findFiles(glob: 'features/*/*.json')
+                        def files = findFiles(glob: '*.txt')
                         for(file in files) {
                             echo "file: ${file.path}"
                         }
