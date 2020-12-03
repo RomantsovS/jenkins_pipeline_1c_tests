@@ -39,6 +39,7 @@ pipeline {
                         }
 
                         if (fileExists("${env.WORKSPACE}/compile_log.txt")) {
+                            echo "finded ${env.WORKSPACE}/compile_log.txt"
                             new File("${env.WORKSPACE}/compile_log.txt").delete()
                         }
                     }}
