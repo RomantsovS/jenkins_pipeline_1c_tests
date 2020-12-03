@@ -32,8 +32,8 @@ pipeline {
                         dbManage = load "./lib/DBManage.groovy"
                         sqlUtils = load "./lib/SqlUtils.groovy"
 
-                        if (fileExists('compile_log.txt')) {
-                            new File('compile_log.txt').delete()
+                        if (fileExists('./compile_log.txt')) {
+                            new File('./compile_log.txt').delete()
                         }
                     }}
                     catch (Throwable excp) {
@@ -191,7 +191,7 @@ pipeline {
                             commonMethods.echoAndError("Error running compile SPPR tests ${TEST_BASE_NAME} at ${TEST_BASE_SERVER1C}")
                         }
 
-                        def data = readFile(file: 'compile_log.txt')
+                        def data = readFile(file: './compile_log.txt')
                         println(data)
                     }}
                     catch (Throwable excp) {
