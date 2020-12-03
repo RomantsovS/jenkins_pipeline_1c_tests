@@ -32,8 +32,8 @@ pipeline {
                         dbManage = load "./lib/DBManage.groovy"
                         sqlUtils = load "./lib/SqlUtils.groovy"
 
-                        if (fileExists('./compile_log.txt')) {
-                            new File('./compile_log.txt').delete()
+                        if (fileExists("${env.WORKSPACE}/compile_log.txt")) {
+                            new File("${env.WORKSPACE}/compile_log.txt").delete()
                         }
                     }}
                     catch (Throwable excp) {
