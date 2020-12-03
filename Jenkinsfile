@@ -32,9 +32,8 @@ pipeline {
                         dbManage = load "./lib/DBManage.groovy"
                         sqlUtils = load "./lib/SqlUtils.groovy"
 
-                        // создаем пустые каталоги
-                        dir ('build') {
-                            writeFile file:'dummy', text:''
+                        if (fileExists('compile_log.txt')) {
+                            new File('compile_log.txt').delete()
                         }
                     }}
                     catch (Throwable excp) {
@@ -191,6 +190,9 @@ pipeline {
                         if (returnCode != 0) {
                             commonMethods.echoAndError("Error running compile SPPR tests ${TEST_BASE_NAME} at ${TEST_BASE_SERVER1C}")
                         }
+
+                        def data = readFile(file: 'compile_log.txt')
+                        println(data)
                     }}
                     catch (Throwable excp) {
                         error excp.message
@@ -207,6 +209,9 @@ pipeline {
 
                     if(files.size() == 0) {
                         error "finded 0 feature files"
+                    }
+                    else {
+                        echo "finded ${files.size()} files"
                     }
 
                     for(file in files) {
