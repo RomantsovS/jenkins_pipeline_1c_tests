@@ -340,6 +340,55 @@ def updateInfobase(connString, admin1cUser, admin1cPassword, platform) {
     }
 }
 
+// Вызываем обновление информационной базы (БСП) через Com
+//
+// Параметры:
+//  server1c - сервер 1с 
+//  base_name - база для удаления из кластера
+//  admin1cUser - имя администратора 1С в кластере для базы
+//  admin1cPwd - пароль администратора 1С в кластере для базы
+//
+def run_ib_release_update(platform, server1c, cluster1c_port, base_name, admin_1c_name, admin_1c_pwd, rac_path, rac_port, cluster1c_name, verbose) {
+
+    platformLine = ""
+    if (platform != null && !platform.isEmpty()) {
+        platformLine = "-platform ${platform}"
+    }
+
+    cluster1c_port_line = "";
+    if(cluster1c_port != null && !cluster1c_port.isEmpty()) {
+        cluster1c_port_line = "-cluster1c_port ${cluster1c_port}"
+    }
+
+    admin_1c_name_line = ""
+    if(admin_1c_name != null && !admin_1c_name.isEmpty()) {
+        admin_1c_name_line = "-admin_1c_name ${admin_1c_name}"
+    }
+
+    admin_1c_pwd_line = ""
+    if(admin_1c_pwd != null && !admin_1c_pwd.isEmpty()) {
+        admin_1c_pwd_line = "-admin_1c_pwd ${admin_1c_pwd}"
+    }
+
+    rac_path_line = "-rac_path " + rac_path;
+    rac_port_line = "-rac_port " + rac_port;
+
+    verbose_line = "";
+    if(verbose) {
+        verbose_line = "-verbose 1"
+    }
+
+    def command = "oscript one_script_tools/run_ib_release_update.os ${platformLine} -server1c ${server1c} ${cluster1c_port_line}"
+    command = command + " -base_name ${base_name} ${admin_1c_name_line} ${admin_1c_pwd_line} ${rac_path_line} ${rac_port_line}"
+    command = command + " -cluster1c_name ${cluster1c_name} ${verbose_line}";
+    returnCode = commonMethods.cmdReturnStatusCode(command)
+    
+    echo "cmd status code $returnCode"
+    
+    if (returnCode != 0) {
+        commonMethods.echoAndError("Error run_ib_release_update ${base} at ${server1c}")
+    }
+}
 
 def createFileDatabase(pathTo1CThickClient, databaseDirectory, deleteIfExits) {
     

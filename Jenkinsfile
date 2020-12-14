@@ -150,6 +150,9 @@ pipeline {
                     try { timeout(time: env.TIMEOUT_FOR_UPDATE_TEST_DB_FROM_REPO_STAGE.toInteger(), unit: 'MINUTES') { 
                         dbManage.updateDbTask(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_1C_PORT, env.TEST_BASE_NAME,
                         env.STORAGE_PATH, env.STORAGE_USR, env.STORAGE_PWD, env.ADMIN_1C_NAME, env.ADMIN_1C_PWD)
+
+                        dbManage.run_ib_release_update(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_1C_PORT, env.TEST_BASE_NAME,
+                        env.ADMIN_1C_NAME, env.ADMIN_1C_PWD, env.RAC_PATH, env.RAC_PORT, env.CLUSTER_NAME_1C)
                     }}
                     catch (Throwable excp) {
                         error excp.message
