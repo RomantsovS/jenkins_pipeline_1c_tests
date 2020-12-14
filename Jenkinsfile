@@ -165,7 +165,7 @@ pipeline {
             steps {
                 script {
                     try { timeout(time: env.TIMEOUT_FOR_RUN_IB_RELEASE_UPDATE_STAGE.toInteger(), unit: 'MINUTES') { 
-                        dbManage.run_ib_release_update(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_1C_PORT, env.TEST_BASE_NAME,
+                        dbManage.runIBReleaseUpdate(env.PLATFORM_1C_VERSION, env.SERVER_1C, env.CLUSTER_1C_PORT, env.TEST_BASE_NAME,
                         env.ADMIN_1C_NAME, env.ADMIN_1C_PWD, env.RAC_PATH, env.RAC_PORT, env.CLUSTER_NAME_1C)
                     }}
                     catch (Throwable excp) {
