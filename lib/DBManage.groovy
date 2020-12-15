@@ -348,7 +348,8 @@ def updateInfobase(connString, admin1cUser, admin1cPassword, platform) {
 //  admin1cUser - имя администратора 1С в кластере для базы
 //  admin1cPwd - пароль администратора 1С в кластере для базы
 //
-def runIBReleaseUpdate(platform, server1c, cluster1c_port, base_name, admin_1c_name, admin_1c_pwd, rac_path, rac_port, cluster1c_name, verbose) {
+def runIBReleaseUpdate(platform, server1c, cluster1c_port, base_name, admin_1c_name, admin_1c_pwd, rac_path, rac_port,
+    cluster1c_name, wait_deferred_handler, verbose) {
 
     platformLine = ""
     if (platform != null && !platform.isEmpty()) {
