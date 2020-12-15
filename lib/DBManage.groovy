@@ -381,7 +381,7 @@ def runIBReleaseUpdate(platform, server1c, cluster1c_port, base_name, admin_1c_n
 
     def command = "oscript one_script_tools/run_ib_release_update.os ${platformLine} -server1c ${server1c} ${cluster1c_port_line}"
     command = command + " -base_name ${base_name} ${admin_1c_name_line} ${admin_1c_pwd_line} ${rac_path_line} ${rac_port_line}"
-    command = command + " -cluster1c_name ${cluster1c_name} ${verbose_line}";
+    command = command + " -cluster1c_name ${cluster1c_name} wait_deferred_handler ${wait_deferred_handler} ${verbose_line}";
     returnCode = commonMethods.cmdReturnStatusCode(command)
     
     echo "cmd status code $returnCode"
