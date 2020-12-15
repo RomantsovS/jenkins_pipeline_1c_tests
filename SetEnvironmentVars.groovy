@@ -48,6 +48,8 @@ env.STORAGE_PWD = ""
 env.PATH_TO_1C = "\\\\rusklimat.ru\\app\\1Cv8ADM\\8.3.12.1685_CR\\bin\\1cv8c.exe" //если env.USE_VANESSA_RUNNER = "false"
 env.PATH_TO_VANESSA_AUTOMATION = "\\\\dev1c\\vanessa-automation\\vanessa-automation.epf"
 
+env.WAIT_DEFERRED_HANDLER = "1"
+
 env.TIMEOUT_FOR_DELETE_TEST_DB_STAGE = "4"
 env.TIMEOUT_FOR_SQL_BACKUP_TEMPLATE_DB_STAGE = "5"
 env.TIMEOUT_FOR_SQL_RESTORE_TEMPLATE_DB_STAGE = "6"
