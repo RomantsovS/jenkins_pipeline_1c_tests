@@ -33,16 +33,10 @@ pipeline {
                         dbManage = load "./lib/DBManage.groovy"
                         sqlUtils = load "./lib/SqlUtils.groovy"
 
-                        if (fileExists("${env.WORKSPACE}/compile_log.txt")) {
-                            echo "finded ${env.WORKSPACE}/compile_log.txt"
-                            def file_del = new File("${env.WORKSPACE}/compile_log.txt")
-                            file_del.delete()
-                        }
-
-                        if (fileExists("${env.WORKSPACE}/BuildResultMessage.txt")) {
-                            echo "finded ${env.WORKSPACE}/BuildResultMessage.txt"
-                            def file_del = new File("${env.WORKSPACE}/BuildResultMessage.txt")
-                            file_del.delete()
+                        // создаем пустые каталоги
+                        dir ('build') {
+                            deleteDir()
+                            writeFile file:'dummy', text:''
                         }
                     }}
                     catch (Throwable excp) {
@@ -233,7 +227,7 @@ pipeline {
             when { expression {params.run_tests_stage} }
             steps {
                 script {
-                    def files = findFiles(glob: 'features/*/*.json')
+                    def files = findFiles(glob: 'build/features/*/*.json')
 
                     if(files.size() == 0) {
                         error "finded 0 feature files"
@@ -298,10 +292,10 @@ pipeline {
             script {
                 if (currentBuild.result != "ABORTED") {
                     try {
-                        dir ('report/allurereport') {
+                        dir ('build/report/allurereport') {
                             writeFile file:'environment.properties', text:"Build=${env.BUILD_URL}"
                         }
-                        allure includeProperties: false, jdk: '', results: [[path: 'report/allurereport']]
+                        allure includeProperties: false, jdk: '', results: [[path: 'build/report/allurereport']]
                     }
                     catch (Throwable excp) {
                     }
