@@ -211,8 +211,8 @@ pipeline {
                             commonMethods.echoAndError("Error running compile SPPR tests ${TEST_BASE_NAME} at ${TEST_BASE_SERVER1C}")
                         }
 
-                        if (fileExists("${env.WORKSPACE}/compile_log.txt")) {
-                            def data = readFile(file: './compile_log.txt')
+                        if (fileExists("${env.WORKSPACE}/build/compile_log.txt")) {
+                            def data = readFile(file: './build/compile_log.txt')
                             println(data)
                         }
                     }}
