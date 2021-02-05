@@ -15,7 +15,7 @@ if (isUnix()) {
     // env.ONE_SCRIPT_PATH="/usr/bin/oscript"
 } else {
     env.PLATFORM_1C_VERSION = "8.3.12"
-    env.RAC_PATH = "\\\\rusklimat.ru\\app\\1Cv8ADM\\8.3.16.1063\\bin\\rac.exe"
+    env.RAC_PATH = "C:\\Program Files\\1cv8\\8.3.18.1208\\bin\\rac.exe"
 }
 
 env.git_repo_branch = "master"
