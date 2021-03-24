@@ -5,6 +5,7 @@ pipeline {
         booleanParam(defaultValue: env.delete_test_db_stage == null ? true : env.delete_test_db_stage, description: 'Выполнять ли шаг удаления тестовой базы. По умолчанию: true', name: 'delete_test_db_stage')
         booleanParam(defaultValue: env.sql_backup_template_stage == null ? true : env.sql_backup_template_stage, description: 'Выполнять ли шаг выгрузки бекапа эталонной базы. По умолчанию: true', name: 'sql_backup_template_stage')
         booleanParam(defaultValue: env.sql_restore_template_stage == null ? true : env.sql_restore_template_stage, description: 'Выполнять ли шаг загрузки тестовой базы из бекапа. По умолчанию: true', name: 'sql_restore_template_stage')
+        booleanParam(defaultValue: env.clear_user_cache == null ? true : env.clear_user_cache, description: 'Выполнять ли шаг очистки клиентского кэша. По умолчанию: true', name: 'clear_user_cache')
         booleanParam(defaultValue: env.create_test_db_stage == null ? true : env.create_test_db_stage, description: 'Выполнять ли шаг создания тестовой базы. По умолчанию: true', name: 'create_test_db_stage')
         booleanParam(defaultValue: env.update_test_db_from_repo_stage == null ? true : env.update_test_db_from_repo_stage, description: 'Выполнять ли шаг обновления конфигурации тестовой базы. По умолчанию: true', name: 'update_test_db_from_repo_stage')
         booleanParam(defaultValue: env.run_ib_release_update == null ? true : env.run_ib_release_update, description: 'Выполнять ли шаг обновления ИБ. По умолчанию: true', name: 'run_ib_release_update')
@@ -113,6 +114,28 @@ pipeline {
                 script {
                     try { timeout(time: env.TIMEOUT_FOR_SQL_RESTORE_TEMPLATE_DB_STAGE.toInteger(), unit: 'MINUTES') { 
                         dbManage.restoreTask(env.SERVER_SQL, env.TEST_BASE_NAME, backupPath, "", "")
+                    }}
+                    catch (Throwable excp) {
+                        error excp.message
+                    }
+                }
+            }
+        }
+
+        stage("Clear user cache") {
+            when { expression {params.clear_user_cache} }
+
+            steps {
+                script {
+                    try { timeout(time: 5, unit: 'MINUTES') {
+                        def command = "oscript one_script_tools/clear-cache.os";
+                        returnCode = commonMethods.cmdReturnStatusCode(command);
+
+                        echo "cmd status code $returnCode"
+
+                        if (returnCode != 0) {
+                            commonMethods.echoAndError("Error clear_user_cache")
+                        }
                     }}
                     catch (Throwable excp) {
                         error excp.message
