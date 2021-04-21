@@ -18,8 +18,6 @@ if (isUnix()) {
     env.RAC_PATH = "\"C:\\Program Files\\1cv8\\8.3.18.1289\\bin\\rac.exe\""
 }
 
-env.git_repo_branch = "master"
-
 env.PROPERTIES_CATALOG = "./tests"
 
 env.TIMEOUT_FOR_INIT_STAGE = "3"

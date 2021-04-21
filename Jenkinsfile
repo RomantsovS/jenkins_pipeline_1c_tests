@@ -1,6 +1,7 @@
 pipeline {
     parameters {
         string(defaultValue: "${env.git_repo_url}", description: '* URL к гит-репозиторию, который необходимо проверить.', name: 'git_repo_url')
+        string(defaultValue: "master", description: '* Ветка гит-репозитория.', name: 'git_repo_branch')
         booleanParam(defaultValue: env.checkout_stage == null ? true : env.checkout_stage, description: 'Выполнять ли шаг получения репозитория. По умолчанию: true', name: 'checkout_stage')
         booleanParam(defaultValue: env.delete_test_db_stage == null ? true : env.delete_test_db_stage, description: 'Выполнять ли шаг удаления тестовой базы. По умолчанию: true', name: 'delete_test_db_stage')
         booleanParam(defaultValue: env.sql_backup_template_stage == null ? true : env.sql_backup_template_stage, description: 'Выполнять ли шаг выгрузки бекапа эталонной базы. По умолчанию: true', name: 'sql_backup_template_stage')
