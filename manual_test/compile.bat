@@ -1,0 +1,2 @@
+chcp 65001
+runner run --ibconnection /Scv8app12:1741\SPPR --command "СобратьСценарии;НеЗавершатьРаботу;JsonParams=\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/params.json" --execute "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/СборкаТекстовСценариев.epf" --additional "/Debug -tcp"

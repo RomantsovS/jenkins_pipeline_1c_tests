@@ -1,0 +1,35 @@
+{    
+	"ScenarioFolder": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/tests/features/scenario",
+	"ProcessFolder": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/tests/features/proc",
+	"ExternalMode": true,
+	"ModelDBSettings": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/tests/features/base/bases.yaml",
+	"ModelDBid": "ERP-RKKT-TEST",
+	"FeatureFolder": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/build/features",
+	"VanessaFolder": "\\\\dev1c\\vanessa-automation",
+	"ScreenshotCaptureCommand": "\"C:\\Program Files\\IrfanView\\i_view64.exe\" /capture=1 /convert=",
+	"ScreenshotsFolder": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/build/screenshots"
+	"BDDLogFolder": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/build/BDD_logs"
+	"InfobasePath": "/Scv8app12:1741\\erp_test",
+	"AllureReport": true,
+	"AllureFolder": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/build/report/allurereport",
+	"CucumberReport": false,
+	"jUnitReport": false,
+	"SPPRReport": true,
+	"SPPRReportFolder": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/build/SPPR_report",
+	"PauseOnWindowOpening": "1",
+	"WaitWindowTime": "10",
+	"NumberOfAttempts": "3",
+	"TimeoutForAsyncSteps": "10",
+	"TimeoutTestClientStart": "25",
+	"ErrorFolder": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/build/ErrorFolder",
+	"ScenarioLogFile": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/build/Лог.txt"
+	"ScenarioOutFile": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/build/BuildStatus.txt"
+	
+	"ВыполнятьСборкуСценариев": true,
+	"ВыполнятьСборкуПроцессов": true,
+	
+	"LogFile": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/build/compile_log.txt",
+	"ResultFile": "\\\\rusklimat.ru/app/IT/1C_group/romantsov_s/СППР/build/compile_result",
+	
+	"DebugMode": true
+}
